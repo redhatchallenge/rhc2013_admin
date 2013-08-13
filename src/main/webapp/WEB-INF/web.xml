@@ -4,17 +4,16 @@
               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5"
          xmlns="http://java.sun.com/xml/ns/javaee">
+    <servlet>
+        <servlet-name>org.redhatchallenge.rhc2013.administration UserService</servlet-name>
+        <servlet-class>org.redhatchallenge.rhc2013.server.UserServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>org.redhatchallenge.rhc2013.administration UserService</servlet-name>
+        <url-pattern>/administration/UserService</url-pattern>
+    </servlet-mapping>
 
-  <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>org.redhatchallenge.rhc2013.server.GreetingServiceImpl</servlet-class>
-  </servlet>
-  
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/administration/greet</url-pattern>
-  </servlet-mapping>
+    <!-- Servlets -->
   
   <!-- Default page to serve -->
   <welcome-file-list>

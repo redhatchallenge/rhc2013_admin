@@ -20,10 +20,11 @@
     <!-- Other module inherits                                      -->
 
     <!-- Specify the app entry point class.                         -->
-    <entry-point class='org.redhatchallenge.rhc2013.client.administration'/>
+    <entry-point class='org.redhatchallenge.rhc2013.client.Entry'/>
 
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>
     <source path='shared'/>
 
+    <servlet path="/UserService" class="org.redhatchallenge.rhc2013.server.UserServiceImpl"/>
 </module>

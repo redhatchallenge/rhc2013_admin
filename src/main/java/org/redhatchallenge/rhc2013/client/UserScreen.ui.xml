@@ -3,6 +3,21 @@
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
     <g:HTMLPanel>
         <h1>Search Page</h1>
+        <g:TextBox ui:field="searchField"/>
+        <g:ListBox ui:field="searchTerms" visibleItemCount="1">
+            <g:item value="1">Email</g:item>
+            <g:item value="2">First Name</g:item>
+            <g:item value="3">Last Name</g:item>
+            <g:item value="4">Contact</g:item>
+            <g:item value="5">Country</g:item>
+            <g:item value="6">Country Code</g:item>
+            <g:item value="7">School</g:item>
+            <g:item value="8">Lecturer's First Name</g:item>
+            <g:item value="9">Lecturer's Last Name</g:item>
+            <g:item value="10">Lecturer's Email</g:item>
+            <g:item value="11">Language</g:item>
+        </g:ListBox>
+        <g:Button ui:field="searchButton" text="Search"/><br/>
         <c:CellTable ui:field="cellTable"/>
         <c:SimplePager location="CENTER" ui:field="pager"/>
     </g:HTMLPanel>

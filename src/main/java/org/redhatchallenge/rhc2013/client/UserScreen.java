@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
@@ -18,10 +19,13 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
 import org.redhatchallenge.rhc2013.shared.Student;
@@ -38,36 +42,35 @@ public class UserScreen extends Composite {
 
     private static UserScreenUiBinder UiBinder = GWT.create(UserScreenUiBinder.class);
 
+    @UiField TextBox searchField;
+    @UiField ListBox searchTerms;
+    @UiField Button searchButton;
     @UiField CellTable<Student> cellTable;
     @UiField SimplePager pager;
 
     private UserServiceAsync userService = UserService.Util.getInstance();
+    private List<Student> studentList;
+    private ListDataProvider<Student> provider;
 
     public UserScreen() {
         initWidget(UiBinder.createAndBindUi(this));
 
         initCellTable();
 
-        AsyncDataProvider<Student> provider = new AsyncDataProvider<Student>() {
+        userService.getListOfStudents(new AsyncCallback<List<Student>>() {
             @Override
-            protected void onRangeChanged(HasData<Student> display) {
-                userService.getListOfStudents(new AsyncCallback<List<Student>>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        caught.printStackTrace();
-                    }
-
-                    @Override
-                    public void onSuccess(List<Student> result) {
-                        updateRowData(0, result);
-                        updateRowCount(result.size(), true);
-
-                    }
-                });
+            public void onFailure(Throwable caught) {
+                caught.printStackTrace();
             }
-        };
 
-        provider.addDataDisplay(cellTable);
+            @Override
+            public void onSuccess(List<Student> result) {
+                studentList = result;
+                provider = new ListDataProvider<Student>(studentList);
+                provider.addDataDisplay(cellTable);
+            }
+        });
+
         pager.setDisplay(cellTable);
     }
 
@@ -510,6 +513,109 @@ public class UserScreen extends Composite {
         cellTable.addColumn(languageColumn, "Language");
         cellTable.addColumn(verifiedColumn, "Verified");
         cellTable.addColumn(statusColumn, "Status");
+    }
+
+    @UiHandler("searchButton")
+    public void handleSearchButtonClick(ClickEvent event) {
+        String contains = searchField.getText();
+        List<Student> list = new ArrayList<Student>();
+
+        if(contains.equals("")) {
+            provider.setList(studentList);
+        }
+
+        else {
+            String category = searchTerms.getItemText(searchTerms.getSelectedIndex());
+            if(category.equalsIgnoreCase("Email")) {
+                for(Student s : studentList) {
+                    if(s.getEmail().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("First Name")) {
+                for(Student s : studentList) {
+                    if(s.getFirstName().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("Last Name")) {
+                for(Student s : studentList) {
+                    if(s.getLastName().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("Contact")) {
+                for(Student s : studentList) {
+                    if(s.getContact().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("Country")) {
+                for(Student s : studentList) {
+                    if(s.getCountry().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("Country Code")) {
+                for(Student s : studentList) {
+                    if(s.getCountryCode().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("School")) {
+                for(Student s : studentList) {
+                    if(s.getFirstName().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("Lecturer's First Name")) {
+                for(Student s : studentList) {
+                    if(s.getLecturerFirstName().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("Lecturer's Last Name")) {
+                for(Student s : studentList) {
+                    if(s.getLecturerLastName().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("Lecturer's Email")) {
+                for(Student s : studentList) {
+                    if(s.getLecturerEmail().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            else if(category.equalsIgnoreCase("Language")) {
+                for(Student s : studentList) {
+                    if(s.getLanguage().contains(contains)) {
+                        list.add(s);
+                    }
+                }
+            }
+
+            provider.setList(list);
+        }
     }
 
     private void displayErrorBox(String errorHeader, String message) {

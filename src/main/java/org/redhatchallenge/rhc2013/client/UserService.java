@@ -15,6 +15,7 @@ public interface UserService extends RemoteService {
 
     List<Student> getListOfStudents() throws IllegalArgumentException;
     Boolean updateStudentData(Student student) throws IllegalArgumentException;
+    Boolean deleteStudents(List<Student> students) throws IllegalArgumentException;
 
     public static class Util {
         private static final UserServiceAsync Instance = (UserServiceAsync) GWT.create(UserService.class);

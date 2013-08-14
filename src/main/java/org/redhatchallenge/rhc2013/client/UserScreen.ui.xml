@@ -18,6 +18,7 @@
             <g:item value="11">Language</g:item>
         </g:ListBox>
         <g:Button ui:field="searchButton" text="Search"/><br/>
+        <g:Button ui:field="deleteButton" text="Delete"/><br/>
         <c:CellTable ui:field="cellTable"/>
         <c:SimplePager location="CENTER" ui:field="pager"/>
     </g:HTMLPanel>

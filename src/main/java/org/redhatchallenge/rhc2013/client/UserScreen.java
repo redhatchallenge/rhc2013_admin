@@ -24,9 +24,11 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import org.redhatchallenge.rhc2013.shared.Student;
 
@@ -45,12 +47,20 @@ public class UserScreen extends Composite {
     @UiField TextBox searchField;
     @UiField ListBox searchTerms;
     @UiField Button searchButton;
+    @UiField Button deleteButton;
     @UiField CellTable<Student> cellTable;
     @UiField SimplePager pager;
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
     private ListDataProvider<Student> provider;
+    private List<Student> listOfSelectedStudents = new ArrayList<Student>();
+    private static final ProvidesKey<Student> KEY_PROVIDER = new ProvidesKey<Student>() {
+        @Override
+        public Object getKey(Student item) {
+            return item.getEmail();
+        }
+    };
 
     public UserScreen() {
         initWidget(UiBinder.createAndBindUi(this));
@@ -75,6 +85,29 @@ public class UserScreen extends Composite {
     }
 
     private void initCellTable() {
+
+        final SelectionModel<Student> selectionModel = new MultiSelectionModel<Student>(KEY_PROVIDER);
+        cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Student> createCheckboxManager());
+
+        Column<Student, Boolean> selectColumn = new Column<Student, Boolean>(new CheckboxCell(true, false)) {
+            @Override
+            public Boolean getValue(Student student) {
+                return selectionModel.isSelected(student);
+            }
+        };
+
+        selectColumn.setFieldUpdater(new FieldUpdater<Student, Boolean>() {
+            @Override
+            public void update(int index, Student student, Boolean value) {
+                if(value) {
+                    listOfSelectedStudents.add(student);
+                }
+
+                else {
+                    listOfSelectedStudents.remove(student);
+                }
+            }
+        });
 
         Column<Student, String> emailColumn = new Column<Student, String>(new EditTextCell()) {
             @Override
@@ -500,6 +533,7 @@ public class UserScreen extends Composite {
             }
         });
 
+        cellTable.addColumn(selectColumn);
         cellTable.addColumn(emailColumn, "Email");
         cellTable.addColumn(firstNameColumn, "First Name");
         cellTable.addColumn(lastNameColumn, "Last Name");
@@ -616,6 +650,34 @@ public class UserScreen extends Composite {
 
             provider.setList(list);
         }
+    }
+
+    @UiHandler("deleteButton")
+    public void handleDeleteButtonClick(ClickEvent event) {
+        userService.deleteStudents(listOfSelectedStudents, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                caught.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if(!result) {
+                    displayErrorBox("Error", "Error with deleting users");
+                }
+
+                else {
+                    List<Student> toBeRemoved = new ArrayList<Student>();
+                    for(Student s : studentList) {
+                        if(listOfSelectedStudents.contains(s)) {
+                            toBeRemoved.add(s);
+                        }
+                    }
+                    studentList.removeAll(toBeRemoved);
+                    provider.setList(studentList);
+                }
+            }
+        });
     }
 
     private void displayErrorBox(String errorHeader, String message) {

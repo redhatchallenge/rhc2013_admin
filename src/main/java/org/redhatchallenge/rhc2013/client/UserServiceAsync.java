@@ -12,4 +12,6 @@ public interface UserServiceAsync {
     void getListOfStudents(AsyncCallback<List<Student>> async);
 
     void updateStudentData(Student student, AsyncCallback<Boolean> async);
+
+    void deleteStudents(List<Student> students, AsyncCallback<Boolean> async);
 }

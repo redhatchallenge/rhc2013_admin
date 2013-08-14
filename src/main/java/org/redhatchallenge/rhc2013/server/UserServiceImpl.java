@@ -41,4 +41,23 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
         }
     }
+
+    @Override
+    public Boolean deleteStudents(List<Student> students) throws IllegalArgumentException {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        try {
+            for(Student s : students) {
+                session.delete(s);
+            }
+
+            session.getTransaction().commit();
+            return true;
+        }
+
+        catch (HibernateException e) {
+            session.getTransaction().rollback();
+            return false;
+        }
+    }
 }

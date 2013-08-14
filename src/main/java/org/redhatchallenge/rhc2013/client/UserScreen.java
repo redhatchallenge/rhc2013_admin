@@ -49,6 +49,7 @@ public class UserScreen extends Composite {
     @UiField Button searchButton;
     @UiField Button registerButton;
     @UiField Button deleteButton;
+    @UiField Button exportButton;
     @UiField CellTable<Student> cellTable;
     @UiField SimplePager pager;
 
@@ -690,6 +691,32 @@ public class UserScreen extends Composite {
     @UiHandler("registerButton")
     public void handleRegisterButtonClick(ClickEvent event) {
         ContentContainer.INSTANCE.setContent(new RegisterScreen());
+    }
+
+    @UiHandler("exportButton")
+    public void handleExportButtonClick(ClickEvent event) {
+        /**
+         * The following two lines is to avoid the issue
+         * of .getList() returning a ListWrapper type
+         * instead of a Serializable list type which
+         * causes a SerializationException to be thrown.
+         *
+         * See: http://blog.rubiconred.com/2011/04/gwt-serializationexception-on-rpc-call.html
+         */
+        List<Student> list = new ArrayList<Student>();
+        list.addAll(provider.getList());
+
+        userService.exportCsv(list, new AsyncCallback<Void>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                caught.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(Void result) {
+
+            }
+        });
     }
 
     private void displayErrorBox(String errorHeader, String message) {

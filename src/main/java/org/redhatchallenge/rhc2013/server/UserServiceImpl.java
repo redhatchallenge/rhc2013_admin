@@ -1,5 +1,6 @@
 package org.redhatchallenge.rhc2013.server;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -7,6 +8,12 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.redhatchallenge.rhc2013.client.UserService;
 import org.redhatchallenge.rhc2013.shared.Student;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -117,5 +124,46 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
             session.getTransaction().rollback();
             return false;
         }
+    }
+
+    @Override
+    public void exportCsv(List<Student> students) throws IllegalArgumentException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        CSVWriter writer;
+        try {
+            writer = new CSVWriter(new FileWriter("/home/fedora/yourfile.csv"));
+            List<String[]> list = new ArrayList<String[]>();
+
+            for(Student s : students) {
+                list.add(studentToStringArray(s));
+            }
+
+            writer.writeAll(list);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private String[] studentToStringArray(Student student) {
+
+        String[] strings = new String[14];
+        strings[0] = student.getEmail();
+        strings[1] = student.getPassword();
+        strings[2] = student.getFirstName();
+        strings[3] = student.getLastName();
+        strings[4] = student.getContact();
+        strings[5] = student.getCountry();
+        strings[6] = student.getCountryCode();
+        strings[7] = student.getSchool();
+        strings[8] = student.getLecturerFirstName();
+        strings[9] = student.getLecturerLastName();
+        strings[10] = student.getLecturerEmail();
+        strings[11] = student.getLanguage();
+        strings[12] = student.getVerified().toString();
+        strings[13] = student.getStatus().toString();
+
+        return strings;
     }
 }

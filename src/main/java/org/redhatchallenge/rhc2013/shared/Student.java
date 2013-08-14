@@ -20,8 +20,8 @@ public class Student implements Serializable {
     private String lecturerLastName;
     private String lecturerEmail;
     private String language;
-    private Boolean verified;
-    private Boolean status;
+    private Boolean verified = false;
+    private Boolean status = true;
     private int[] questions = {};
     private long timeslot;
 

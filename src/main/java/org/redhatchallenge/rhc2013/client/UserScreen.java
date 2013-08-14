@@ -47,6 +47,7 @@ public class UserScreen extends Composite {
     @UiField TextBox searchField;
     @UiField ListBox searchTerms;
     @UiField Button searchButton;
+    @UiField Button registerButton;
     @UiField Button deleteButton;
     @UiField CellTable<Student> cellTable;
     @UiField SimplePager pager;
@@ -206,7 +207,13 @@ public class UserScreen extends Composite {
             countryList.add("Singapore");
             countryList.add("Malaysia");
             countryList.add("Thailand");
-            countryList.add("China");
+            countryList.add("China/Region 1");
+            countryList.add("China/Region 2");
+            countryList.add("China/Region 3");
+            countryList.add("China/Region 4");
+            countryList.add("China/Region 5");
+            countryList.add("China/Region 6");
+            countryList.add("China/Others");
             countryList.add("Hong Kong");
             countryList.add("Taiwan");
 
@@ -680,6 +687,11 @@ public class UserScreen extends Composite {
         });
     }
 
+    @UiHandler("registerButton")
+    public void handleRegisterButtonClick(ClickEvent event) {
+        ContentContainer.INSTANCE.setContent(new RegisterScreen());
+    }
+
     private void displayErrorBox(String errorHeader, String message) {
         final DialogBox errorBox = new DialogBox();
         errorBox.setText(errorHeader);
@@ -701,5 +713,4 @@ public class UserScreen extends Composite {
         errorBox.setWidget(verticalPanel);
         errorBox.center();
     }
-
 }

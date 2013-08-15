@@ -8,9 +8,17 @@
         <servlet-name>org.redhatchallenge.rhc2013.administration UserService</servlet-name>
         <servlet-class>org.redhatchallenge.rhc2013.server.UserServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>org.redhatchallenge.rhc2013.administration DownloadCsv</servlet-name>
+        <servlet-class>org.redhatchallenge.rhc2013.server.DownloadCsv</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>org.redhatchallenge.rhc2013.administration UserService</servlet-name>
         <url-pattern>/administration/UserService</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>org.redhatchallenge.rhc2013.administration DownloadCsv</servlet-name>
+        <url-pattern>/administration/download</url-pattern>
     </servlet-mapping>
 
     <!-- Servlets -->

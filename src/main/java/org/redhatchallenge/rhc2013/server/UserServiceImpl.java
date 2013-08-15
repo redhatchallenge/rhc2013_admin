@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author: Terry Chia (terrycwk1994@gmail.com)
@@ -25,11 +26,16 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
     public List<Student> getListOfStudents() throws IllegalArgumentException {
 
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        session.beginTransaction();
-        //noinspection unchecked
-        List<Student> studentList = session.createCriteria(Student.class).list();
-        session.close();
-        return studentList;
+        try {
+            session.beginTransaction();
+            //noinspection unchecked
+            List<Student> studentList = session.createCriteria(Student.class).list();
+            session.close();
+            return studentList;
+        } catch (HibernateException e) {
+            session.close();
+            return null;
+        }
     }
 
     @Override
@@ -127,11 +133,12 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
     }
 
     @Override
-    public void exportCsv(List<Student> students) throws IllegalArgumentException {
+    public String exportCsv(List<Student> students) throws IllegalArgumentException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         CSVWriter writer;
         try {
-            writer = new CSVWriter(new FileWriter("/home/fedora/yourfile.csv"));
+            String fname = UUID.randomUUID().toString();
+            writer = new CSVWriter(new FileWriter(System.getenv("OPENSHIFT_TMP_DIR") + fname + ".csv"));
             List<String[]> list = new ArrayList<String[]>();
 
             for(Student s : students) {
@@ -140,12 +147,20 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
 
             writer.writeAll(list);
             writer.close();
+
+            return fname + ".csv";
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-
     }
 
+    /**
+     * Converts a Student entity to a String[] representation.
+     *
+     * @param student  Student entity to be converted
+     * @return  String[] representation of the Student entity
+     */
     private String[] studentToStringArray(Student student) {
 
         String[] strings = new String[14];

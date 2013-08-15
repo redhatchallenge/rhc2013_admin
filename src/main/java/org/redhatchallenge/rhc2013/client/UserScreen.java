@@ -5,6 +5,7 @@ import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SelectionCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -14,10 +15,12 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -706,15 +709,18 @@ public class UserScreen extends Composite {
         List<Student> list = new ArrayList<Student>();
         list.addAll(provider.getList());
 
-        userService.exportCsv(list, new AsyncCallback<Void>() {
+        userService.exportCsv(list, new AsyncCallback<String>() {
             @Override
             public void onFailure(Throwable caught) {
                 caught.printStackTrace();
             }
 
             @Override
-            public void onSuccess(Void result) {
+            public void onSuccess(String result) {
+                String url = GWT.getHostPageBaseURL() + "administration/download?file=" + result;
 
+                Frame downloadFrame = Frame.wrap(Document.get().getElementById("__gwt_downloadFrame"));
+                downloadFrame.setUrl(url);
             }
         });
     }

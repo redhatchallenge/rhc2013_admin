@@ -23,7 +23,7 @@ public class Student implements Serializable {
     private Boolean verified = false;
     private Boolean status = true;
     private int[] questions = {};
-    private long timeslot;
+    private long timeslot = 0;
 
     public int getContestantId() {
         return contestantId;

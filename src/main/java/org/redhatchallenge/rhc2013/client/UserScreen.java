@@ -5,6 +5,7 @@ import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SelectionCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -14,19 +15,23 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionModel;
 import org.redhatchallenge.rhc2013.shared.Student;
 
@@ -45,12 +50,22 @@ public class UserScreen extends Composite {
     @UiField TextBox searchField;
     @UiField ListBox searchTerms;
     @UiField Button searchButton;
+    @UiField Button registerButton;
+    @UiField Button deleteButton;
+    @UiField Button exportButton;
     @UiField CellTable<Student> cellTable;
     @UiField SimplePager pager;
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
     private ListDataProvider<Student> provider;
+    private List<Student> listOfSelectedStudents = new ArrayList<Student>();
+    private static final ProvidesKey<Student> KEY_PROVIDER = new ProvidesKey<Student>() {
+        @Override
+        public Object getKey(Student item) {
+            return item.getEmail();
+        }
+    };
 
     public UserScreen() {
         initWidget(UiBinder.createAndBindUi(this));
@@ -75,6 +90,29 @@ public class UserScreen extends Composite {
     }
 
     private void initCellTable() {
+
+        final SelectionModel<Student> selectionModel = new MultiSelectionModel<Student>(KEY_PROVIDER);
+        cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Student> createCheckboxManager());
+
+        Column<Student, Boolean> selectColumn = new Column<Student, Boolean>(new CheckboxCell(true, false)) {
+            @Override
+            public Boolean getValue(Student student) {
+                return selectionModel.isSelected(student);
+            }
+        };
+
+        selectColumn.setFieldUpdater(new FieldUpdater<Student, Boolean>() {
+            @Override
+            public void update(int index, Student student, Boolean value) {
+                if(value) {
+                    listOfSelectedStudents.add(student);
+                }
+
+                else {
+                    listOfSelectedStudents.remove(student);
+                }
+            }
+        });
 
         Column<Student, String> emailColumn = new Column<Student, String>(new EditTextCell()) {
             @Override
@@ -173,7 +211,13 @@ public class UserScreen extends Composite {
             countryList.add("Singapore");
             countryList.add("Malaysia");
             countryList.add("Thailand");
-            countryList.add("China");
+            countryList.add("China/Region 1");
+            countryList.add("China/Region 2");
+            countryList.add("China/Region 3");
+            countryList.add("China/Region 4");
+            countryList.add("China/Region 5");
+            countryList.add("China/Region 6");
+            countryList.add("China/Others");
             countryList.add("Hong Kong");
             countryList.add("Taiwan");
 
@@ -500,6 +544,7 @@ public class UserScreen extends Composite {
             }
         });
 
+        cellTable.addColumn(selectColumn);
         cellTable.addColumn(emailColumn, "Email");
         cellTable.addColumn(firstNameColumn, "First Name");
         cellTable.addColumn(lastNameColumn, "Last Name");
@@ -618,6 +663,68 @@ public class UserScreen extends Composite {
         }
     }
 
+    @UiHandler("deleteButton")
+    public void handleDeleteButtonClick(ClickEvent event) {
+        userService.deleteStudents(listOfSelectedStudents, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                caught.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if(!result) {
+                    displayErrorBox("Error", "Error with deleting users");
+                }
+
+                else {
+                    List<Student> toBeRemoved = new ArrayList<Student>();
+                    for(Student s : studentList) {
+                        if(listOfSelectedStudents.contains(s)) {
+                            toBeRemoved.add(s);
+                        }
+                    }
+                    studentList.removeAll(toBeRemoved);
+                    provider.setList(studentList);
+                }
+            }
+        });
+    }
+
+    @UiHandler("registerButton")
+    public void handleRegisterButtonClick(ClickEvent event) {
+        ContentContainer.INSTANCE.setContent(new RegisterScreen());
+    }
+
+    @UiHandler("exportButton")
+    public void handleExportButtonClick(ClickEvent event) {
+        /**
+         * The following two lines is to avoid the issue
+         * of .getList() returning a ListWrapper type
+         * instead of a Serializable list type which
+         * causes a SerializationException to be thrown.
+         *
+         * See: http://blog.rubiconred.com/2011/04/gwt-serializationexception-on-rpc-call.html
+         */
+        List<Student> list = new ArrayList<Student>();
+        list.addAll(provider.getList());
+
+        userService.exportCsv(list, new AsyncCallback<String>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                caught.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                String url = GWT.getHostPageBaseURL() + "administration/download?file=" + result;
+
+                Frame downloadFrame = Frame.wrap(Document.get().getElementById("__gwt_downloadFrame"));
+                downloadFrame.setUrl(url);
+            }
+        });
+    }
+
     private void displayErrorBox(String errorHeader, String message) {
         final DialogBox errorBox = new DialogBox();
         errorBox.setText(errorHeader);
@@ -639,5 +746,4 @@ public class UserScreen extends Composite {
         errorBox.setWidget(verticalPanel);
         errorBox.center();
     }
-
 }

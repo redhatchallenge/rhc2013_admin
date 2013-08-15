@@ -1,0 +1,54 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <g:HTMLPanel>
+        <h1>User Creation</h1>
+        Email Address: <g:TextBox ui:field="emailField"/><br/>
+        Password: <g:TextBox ui:field="passwordField"/>
+        <g:Button ui:field="generatePasswordButton" text="Generate Password"/><br/>
+        Confirm Password: <g:TextBox ui:field="confirmPasswordField"/><br/>
+        First Name: <g:TextBox ui:field="firstNameField"/><br/>
+        Last Name: <g:TextBox ui:field="lastNameField"/><br/>
+        Contact: <g:TextBox ui:field="contactField"/><br/>
+        Country: <g:ListBox ui:field="countryField" visibleItemCount="1">
+            <g:item value="1">Singapore</g:item>
+            <g:item value="2">Malaysia</g:item>
+            <g:item value="3">Thailand</g:item>
+            <g:item value="4">China</g:item>
+            <g:item value="5">Hong Kong</g:item>
+            <g:item value="6">Taiwan</g:item>
+        </g:ListBox>
+
+        <g:ListBox ui:field="regionField" visibleItemCount="1" visible="false">
+            <g:item value="1">Region 1</g:item>
+            <g:item value="2">Region 2</g:item>
+            <g:item value="3">Region 3</g:item>
+            <g:item value="4">Region 4</g:item>
+            <g:item value="5">Region 5</g:item>
+            <g:item value="6">Region 6</g:item>
+            <g:item value="7">Others</g:item>
+        </g:ListBox><br/>
+
+        Country Code: <g:ListBox ui:field="countryCodeField" visibleItemCount="1">
+            <g:item value="1">65</g:item>
+            <g:item value="2">60</g:item>
+            <g:item value="3">66</g:item>
+            <g:item value="4">86</g:item>
+            <g:item value="5">852</g:item>
+            <g:item value="6">886</g:item>
+        </g:ListBox>
+
+        School: <g:TextBox ui:field="schoolField"/><br/>
+        Lecturer's First Name: <g:TextBox ui:field="lecturerFirstNameField"/><br/>
+        Lecturer's Last Name: <g:TextBox ui:field="lecturerLastNameField"/><br/>
+        Lecturer's Email: <g:TextBox ui:field="lecturerEmailField"/><br/>
+        Language: <g:ListBox ui:field="languageField" visibleItemCount="1">
+            <g:item value="1">English</g:item>
+            <g:item value="2">Chinese (Simplified)</g:item>
+            <g:item value="3">Chinese (Traditional)</g:item>
+        </g:ListBox><br/>
+        Set Verified <g:CheckBox ui:field="verifiedField" /><br/>
+        <g:Button ui:field="registerButton" text="Create"/>
+        <g:Button ui:field="backButton" text="Back"/>
+        <g:Label ui:field="messageLabel"/>
+    </g:HTMLPanel>
+</ui:UiBinder>

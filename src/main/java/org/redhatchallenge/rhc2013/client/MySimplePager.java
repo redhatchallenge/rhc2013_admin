@@ -1,5 +1,6 @@
 package org.redhatchallenge.rhc2013.client;
 
+import com.google.gwt.uibinder.client.UiConstructor;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.view.client.Range;
 
@@ -12,22 +13,13 @@ import com.google.gwt.view.client.Range;
  */
 public class MySimplePager extends SimplePager{
 
-    public MySimplePager(){
-        super();
-        this.setRangeLimited(true);
-    }
 
-//    public MySimplePager(TextLocation location, Resources resources, boolean showFastForwardButton, int fastForwardRows, boolean showLastPageButton){
-//        super(location, resources, showFastForwardButton, fastForwardRows, showLastPageButton);
-//        this.setRangeLimited(true);
-//    }
-
-
+    @UiConstructor
     public MySimplePager(TextLocation location, boolean showFastForwardButton, int fastForwardRows, boolean showLastPageButton) {
         super(location, showFastForwardButton, fastForwardRows, showLastPageButton);    //To change body of overridden methods use File | Settings | File Templates.
         this.setRangeLimited(true);
     }
-
+    @Override
     public void setPageStart(int index) {
         if (this.getDisplay() != null) {
             Range range = getDisplay().getVisibleRange();

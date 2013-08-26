@@ -28,6 +28,6 @@
         <g:Button ui:field="registerButton" text="Add"/>
         <g:Button ui:field="exportButton" text="Export"/>
         <c:CellTable ui:field="cellTable"/>
-        <z:MySimplePager ui:field="pager"/>
+        <z:MySimplePager location="CENTER" fastForwardRows="0" showFastForwardButton="false" showLastPageButton="true"  ui:field="pager"/>
     </g:HTMLPanel>
 </ui:UiBinder>

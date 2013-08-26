@@ -3,6 +3,11 @@
              xmlns:c="urn:import:com.google.gwt.user.cellview.client">
     <g:HTMLPanel>
         <h1>Search Page</h1>
+        <center>
+            <g:Label ui:field="registrationLabel"/>
+            <g:Label ui:field="verifiedLabel"/>
+        </center>
+
         <g:TextBox ui:field="searchField"/>
         <g:ListBox ui:field="searchTerms" visibleItemCount="1">
             <g:item value="1">Email</g:item>

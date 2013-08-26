@@ -14,21 +14,18 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.SimplePager;
-import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.Frame;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
-import com.google.gwt.view.client.HasData;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
@@ -36,6 +33,7 @@ import com.google.gwt.view.client.SelectionModel;
 import org.redhatchallenge.rhc2013.shared.Student;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -55,6 +53,8 @@ public class UserScreen extends Composite {
     @UiField Button exportButton;
     @UiField CellTable<Student> cellTable;
     @UiField SimplePager pager;
+    @UiField Label registrationLabel;
+    @UiField Label verifiedLabel;
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
@@ -66,6 +66,7 @@ public class UserScreen extends Composite {
             return item.getEmail();
         }
     };
+    private int count;
 
     public UserScreen() {
         initWidget(UiBinder.createAndBindUi(this));
@@ -83,10 +84,24 @@ public class UserScreen extends Composite {
                 studentList = result;
                 provider = new ListDataProvider<Student>(studentList);
                 provider.addDataDisplay(cellTable);
+
+                registrationLabel.setText("Total number of registered user: " + studentList.size());
+                for (int i=0; i<studentList.size(); i++){
+                    if (studentList.get(i).getVerified().equals(true)){
+                        count++;
+                    }
+                }
+
+               verifiedLabel.setText("Total number of verified user:  " + count);
             }
         });
 
+
+
         pager.setDisplay(cellTable);
+
+        pager.setPageSize(4);
+//        pager.
     }
 
     private void initCellTable() {
@@ -120,6 +135,26 @@ public class UserScreen extends Composite {
                 return student.getEmail();
             }
         };
+//        emailColumn.setSortable(true); //Allow Sorting
+//        emailColumn.setDefaultSortAscending(false);
+//        final ColumnSortEvent.ListHandler<Student> columnSortHandler = new ColumnSortEvent.ListHandler<Student>(studentList);
+//        columnSortHandler.setComparator(emailColumn, new Comparator<Student>() {
+//            @Override
+//            public int compare(Student o1, Student o2) {
+//                if (o1 == o2){
+//                   return 0;
+//                }
+//                if (o1 != null) {
+//                    return (o2 != null) ? o1.getEmail().compareTo(o2.getEmail()) :1;
+//                }
+//                return -1;
+//            }
+//        });
+//
+//        cellTable.addColumnSortHandler(columnSortHandler);
+//        cellTable.getColumnSortList().push(emailColumn);  //end of sorting
+
+
 
         emailColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override

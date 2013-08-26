@@ -104,6 +104,7 @@ public class RegisterScreen extends Composite {
             sb.append( AB.charAt( Random.nextInt(AB.length()) ) );
 
         passwordField.setText(sb.toString());
+        confirmPasswordField.setText(sb.toString());
     }
 
     @UiHandler("registerButton")
@@ -158,6 +159,16 @@ public class RegisterScreen extends Composite {
             public void onSuccess(Boolean bool) {
                 if(bool) {
                     messageLabel.setText("Successful");
+                    emailField.setText("");
+                    passwordField.setText("");
+                    confirmPasswordField.setText("");
+                    firstNameField.setText("");
+                    lastNameField.setText("");
+                    contactField.setText("");
+                    schoolField.setText("");
+                    lecturerEmailField.setText("");
+                    lecturerFirstNameField.setText("");
+                    lecturerLastNameField.setText("");
                 }
 
                 else {

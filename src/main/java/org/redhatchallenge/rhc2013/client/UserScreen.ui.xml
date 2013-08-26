@@ -1,6 +1,7 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
-             xmlns:c="urn:import:com.google.gwt.user.cellview.client">
+             xmlns:c="urn:import:com.google.gwt.user.cellview.client"
+             xmlns:z="urn:import:org.redhatchallenge.rhc2013.client">
     <g:HTMLPanel>
         <h1>Search Page</h1>
         <center>
@@ -28,6 +29,6 @@
         <g:Button ui:field="exportButton" text="Export"/>
         <g:Button ui:field="refreshButton" text="Refresh"/>
         <c:CellTable ui:field="cellTable"/>
-        <c:SimplePager location="CENTER" ui:field="pager"/>
+        <z:MySimplePager location="CENTER" fastForwardRows="0" showFastForwardButton="false" showLastPageButton="true"  ui:field="pager"/>
     </g:HTMLPanel>
 </ui:UiBinder>

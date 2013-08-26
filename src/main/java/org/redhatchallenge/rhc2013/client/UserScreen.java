@@ -56,7 +56,7 @@ public class UserScreen extends Composite {
     @UiField Button exportButton;
     @UiField Button refreshButton;
     @UiField CellTable<Student> cellTable;
-    @UiField SimplePager pager;
+    @UiField MySimplePager pager;
     @UiField Label registrationLabel;
     @UiField Label verifiedLabel;
 
@@ -72,6 +72,7 @@ public class UserScreen extends Composite {
     };
 
     public UserScreen() {
+
         initWidget(UiBinder.createAndBindUi(this));
 
         userService.getListOfStudents(new AsyncCallback<List<Student>>() {

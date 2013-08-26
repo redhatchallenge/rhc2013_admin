@@ -13,6 +13,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -36,6 +37,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
+
 /**
  * @author: Terry Chia (terrycwk1994@gmail.com)
  */
@@ -51,6 +54,7 @@ public class UserScreen extends Composite {
     @UiField Button registerButton;
     @UiField Button deleteButton;
     @UiField Button exportButton;
+    @UiField Button refreshButton;
     @UiField CellTable<Student> cellTable;
     @UiField SimplePager pager;
     @UiField Label registrationLabel;
@@ -66,12 +70,9 @@ public class UserScreen extends Composite {
             return item.getEmail();
         }
     };
-    private int count;
 
     public UserScreen() {
         initWidget(UiBinder.createAndBindUi(this));
-
-        initCellTable();
 
         userService.getListOfStudents(new AsyncCallback<List<Student>>() {
             @Override
@@ -81,30 +82,26 @@ public class UserScreen extends Composite {
 
             @Override
             public void onSuccess(List<Student> result) {
+
                 studentList = result;
+
+                setUserCount();
+
                 provider = new ListDataProvider<Student>(studentList);
                 provider.addDataDisplay(cellTable);
 
-                registrationLabel.setText("Total number of registered user: " + studentList.size());
-                for (int i=0; i<studentList.size(); i++){
-                    if (studentList.get(i).getVerified().equals(true)){
-                        count++;
-                    }
-                }
-
-               verifiedLabel.setText("Total number of verified user:  " + count);
+                initCellTable();
             }
         });
-
-
 
         pager.setDisplay(cellTable);
 
         pager.setPageSize(4);
-//        pager.
     }
 
     private void initCellTable() {
+
+        List list = provider.getList();
 
         final SelectionModel<Student> selectionModel = new MultiSelectionModel<Student>(KEY_PROVIDER);
         cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Student> createCheckboxManager());
@@ -135,26 +132,25 @@ public class UserScreen extends Composite {
                 return student.getEmail();
             }
         };
-//        emailColumn.setSortable(true); //Allow Sorting
-//        emailColumn.setDefaultSortAscending(false);
-//        final ColumnSortEvent.ListHandler<Student> columnSortHandler = new ColumnSortEvent.ListHandler<Student>(studentList);
-//        columnSortHandler.setComparator(emailColumn, new Comparator<Student>() {
-//            @Override
-//            public int compare(Student o1, Student o2) {
-//                if (o1 == o2){
-//                   return 0;
-//                }
-//                if (o1 != null) {
-//                    return (o2 != null) ? o1.getEmail().compareTo(o2.getEmail()) :1;
-//                }
-//                return -1;
-//            }
-//        });
-//
-//        cellTable.addColumnSortHandler(columnSortHandler);
-//        cellTable.getColumnSortList().push(emailColumn);  //end of sorting
 
+        emailColumn.setSortable(true);
+        emailColumn.setDefaultSortAscending(false);
+        final ListHandler<Student> emailSortHandler = new ListHandler<Student>(list);
+        emailSortHandler.setComparator(emailColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getEmail().compareTo(o2.getEmail()) : 1;
+                }
+                return -1;
+            }
+        });
 
+        cellTable.addColumnSortHandler(emailSortHandler);
+        cellTable.getColumnSortList().push(emailColumn);
 
         emailColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
@@ -541,6 +537,7 @@ public class UserScreen extends Composite {
                             displayErrorBox("Failed", "Update has failed");
                         } else {
                             cellTable.redraw();
+                            setUserCount();
                         }
                     }
                 });
@@ -721,6 +718,7 @@ public class UserScreen extends Composite {
                     }
                     studentList.removeAll(toBeRemoved);
                     provider.setList(studentList);
+                    setUserCount();
                 }
             }
         });
@@ -758,6 +756,25 @@ public class UserScreen extends Composite {
                 downloadFrame.setUrl(url);
             }
         });
+    }
+
+    @UiHandler("refreshButton")
+    public void handleRefreshButtonClick(ClickEvent event) {
+        ContentContainer.INSTANCE.setContent(new UserScreen());
+    }
+
+    private void setUserCount() {
+
+        int count = 0;
+
+        registrationLabel.setText("Total number of registered user: " + studentList.size());
+        for (Student student : studentList) {
+            if (student.getVerified()) {
+                count++;
+            }
+        }
+
+        verifiedLabel.setText("Total number of verified user:  " + count);
     }
 
     private void displayErrorBox(String errorHeader, String message) {

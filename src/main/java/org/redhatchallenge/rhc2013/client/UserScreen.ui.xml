@@ -26,6 +26,7 @@
         <g:Button ui:field="deleteButton" text="Delete"/>
         <g:Button ui:field="registerButton" text="Add"/>
         <g:Button ui:field="exportButton" text="Export"/>
+        <g:Button ui:field="refreshButton" text="Refresh"/>
         <c:CellTable ui:field="cellTable"/>
         <c:SimplePager location="CENTER" ui:field="pager"/>
     </g:HTMLPanel>

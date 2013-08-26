@@ -159,16 +159,16 @@ public class RegisterScreen extends Composite {
             public void onSuccess(Boolean bool) {
                 if(bool) {
                     messageLabel.setText("Successful");
-//                    emailField.setText("");
-//                    passwordField.setText("");
-//                    confirmPasswordField.setText("");
-//                    firstNameField.setText("");
-//                    lastNameField.setText("");
-//                    contactField.setText("");
-//                    schoolField.setText("");
-//                    lecturerEmailField.setText("");
-//                    lecturerFirstNameField.setText("");
-//                    lecturerLastNameField.setText("");
+                    emailField.setText("");
+                    passwordField.setText("");
+                    confirmPasswordField.setText("");
+                    firstNameField.setText("");
+                    lastNameField.setText("");
+                    contactField.setText("");
+                    schoolField.setText("");
+                    lecturerEmailField.setText("");
+                    lecturerFirstNameField.setText("");
+                    lecturerLastNameField.setText("");
                 }
 
                 else {

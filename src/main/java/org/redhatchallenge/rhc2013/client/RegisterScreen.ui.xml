@@ -2,53 +2,109 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
         <h1>User Creation</h1>
-        Email Address: <g:TextBox ui:field="emailField"/><br/>
-        Password: <g:TextBox ui:field="passwordField"/>
-        <g:Button ui:field="generatePasswordButton" text="Generate Password"/><br/>
-        Confirm Password: <g:TextBox ui:field="confirmPasswordField"/><br/>
-        First Name: <g:TextBox ui:field="firstNameField"/><br/>
-        Last Name: <g:TextBox ui:field="lastNameField"/><br/>
-        Contact: <g:TextBox ui:field="contactField"/><br/>
-        Country: <g:ListBox ui:field="countryField" visibleItemCount="1">
-            <g:item value="1">Singapore</g:item>
-            <g:item value="2">Malaysia</g:item>
-            <g:item value="3">Thailand</g:item>
-            <g:item value="4">China</g:item>
-            <g:item value="5">Hong Kong</g:item>
-            <g:item value="6">Taiwan</g:item>
-        </g:ListBox>
+       <center>
+           <table width="275">
+               <tr>
+                   <td>Email Address:</td>
+                   <td><g:TextBox ui:field="emailField"/></td>
+               </tr>
+               <tr>
+                   <td>Password:</td>
+                   <td><g:TextBox ui:field="passwordField"/></td>
+                   <td><g:Button ui:field="generatePasswordButton" text="Generate Password"/></td>
+               </tr>
 
-        <g:ListBox ui:field="regionField" visibleItemCount="1" visible="false">
-            <g:item value="1">Region 1</g:item>
-            <g:item value="2">Region 2</g:item>
-            <g:item value="3">Region 3</g:item>
-            <g:item value="4">Region 4</g:item>
-            <g:item value="5">Region 5</g:item>
-            <g:item value="6">Region 6</g:item>
-            <g:item value="7">Others</g:item>
-        </g:ListBox><br/>
-
-        Country Code: <g:ListBox ui:field="countryCodeField" visibleItemCount="1">
-            <g:item value="1">65</g:item>
-            <g:item value="2">60</g:item>
-            <g:item value="3">66</g:item>
-            <g:item value="4">86</g:item>
-            <g:item value="5">852</g:item>
-            <g:item value="6">886</g:item>
-        </g:ListBox>
-
-        School: <g:TextBox ui:field="schoolField"/><br/>
-        Lecturer's First Name: <g:TextBox ui:field="lecturerFirstNameField"/><br/>
-        Lecturer's Last Name: <g:TextBox ui:field="lecturerLastNameField"/><br/>
-        Lecturer's Email: <g:TextBox ui:field="lecturerEmailField"/><br/>
-        Language: <g:ListBox ui:field="languageField" visibleItemCount="1">
-            <g:item value="1">English</g:item>
-            <g:item value="2">Chinese (Simplified)</g:item>
-            <g:item value="3">Chinese (Traditional)</g:item>
-        </g:ListBox><br/>
-        Set Verified <g:CheckBox ui:field="verifiedField" /><br/>
-        <g:Button ui:field="registerButton" text="Create"/>
-        <g:Button ui:field="backButton" text="Back"/>
-        <g:Label ui:field="messageLabel"/>
+               <tr>
+                   <td> Confirm Password: </td>
+                   <td><g:TextBox ui:field="confirmPasswordField"/></td>
+               </tr>
+               <tr>
+                   <td>First Name:</td>
+                   <td><g:TextBox ui:field="firstNameField"/></td>
+               </tr>
+               <tr>
+                   <td>Last Name:</td>
+                   <td><g:TextBox ui:field="lastNameField"/></td>
+               </tr>
+               <tr>
+                   <td>Contact:</td>
+                   <td><g:TextBox ui:field="contactField"/></td>
+               </tr>
+               <tr>
+                   <td>Country:</td>
+                   <td>
+                       <g:ListBox ui:field="countryField" visibleItemCount="1">
+                           <g:item value="1">Singapore</g:item>
+                           <g:item value="2">Malaysia</g:item>
+                           <g:item value="3">Thailand</g:item>
+                           <g:item value="4">China</g:item>
+                           <g:item value="5">Hong Kong</g:item>
+                           <g:item value="6">Taiwan</g:item>
+                       </g:ListBox>
+                   </td>
+                   <td>
+                       <g:ListBox ui:field="regionField" visibleItemCount="1" visible="false">
+                           <g:item value="1">Region 1</g:item>
+                           <g:item value="2">Region 2</g:item>
+                           <g:item value="3">Region 3</g:item>
+                           <g:item value="4">Region 4</g:item>
+                           <g:item value="5">Region 5</g:item>
+                           <g:item value="6">Region 6</g:item>
+                           <g:item value="7">Others</g:item>
+                       </g:ListBox><br/>
+                   </td>
+               </tr>
+               <tr>
+                   <td>Country Code:</td>
+                   <td>
+                       <g:ListBox ui:field="countryCodeField" visibleItemCount="1">
+                           <g:item value="1">65</g:item>
+                           <g:item value="2">60</g:item>
+                           <g:item value="3">66</g:item>
+                           <g:item value="4">86</g:item>
+                           <g:item value="5">852</g:item>
+                           <g:item value="6">886</g:item>
+                       </g:ListBox>
+                   </td>
+               </tr>
+               <tr>
+                   <td>School:</td>
+                   <td><g:TextBox ui:field="schoolField"/></td>
+               </tr>
+               <tr>
+                   <td>Lecturer's First Name: </td>
+                   <td><g:TextBox ui:field="lecturerFirstNameField"/></td>
+               </tr>
+               <tr>
+                   <td>Lecturer's Last Name: </td>
+                   <td><g:TextBox ui:field="lecturerLastNameField"/></td>
+               </tr>
+               <tr>
+                   <td>Lecturer's Email: </td>
+                   <td><g:TextBox ui:field="lecturerEmailField"/></td>
+               </tr>
+               <tr>
+                   <td>Language:</td>
+                   <td>
+                       <g:ListBox ui:field="languageField" visibleItemCount="1">
+                           <g:item value="1">English</g:item>
+                           <g:item value="2">Chinese (Simplified)</g:item>
+                           <g:item value="3">Chinese (Traditional)</g:item>
+                       </g:ListBox>
+                   </td>
+               </tr>
+               <tr>
+                   <td>Set Verified </td>
+                   <td><g:CheckBox ui:field="verifiedField" /></td>
+               </tr>
+               <tr>
+                   <td> <g:Button ui:field="registerButton" text="Create"/></td>
+                   <td><g:Button ui:field="backButton" text="Back"/></td>
+               </tr>
+               <tr>
+                   <td><g:Label ui:field="messageLabel"/></td>
+               </tr>
+           </table>
+       </center>
     </g:HTMLPanel>
 </ui:UiBinder>

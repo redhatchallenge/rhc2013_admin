@@ -52,7 +52,7 @@ public class UserScreen extends Composite {
     @UiField Button deleteButton;
     @UiField Button exportButton;
     @UiField CellTable<Student> cellTable;
-    @UiField SimplePager pager;
+    @UiField(provided = true) MySimplePager pager;
     @UiField Label registrationLabel;
     @UiField Label verifiedLabel;
 
@@ -69,6 +69,11 @@ public class UserScreen extends Composite {
     private int count;
 
     public UserScreen() {
+        MySimplePager simplePager = new MySimplePager(SimplePager.TextLocation.CENTER, false, 0, true);
+        this.pager = simplePager;
+
+        pager.setDisplay(cellTable);
+
         initWidget(UiBinder.createAndBindUi(this));
 
         initCellTable();
@@ -86,21 +91,17 @@ public class UserScreen extends Composite {
                 provider.addDataDisplay(cellTable);
 
                 registrationLabel.setText("Total number of registered user: " + studentList.size());
-                for (int i=0; i<studentList.size(); i++){
-                    if (studentList.get(i).getVerified().equals(true)){
+                for (int i = 0; i < studentList.size(); i++) {
+                    if (studentList.get(i).getVerified().equals(true)) {
                         count++;
                     }
                 }
 
-               verifiedLabel.setText("Total number of verified user:  " + count);
+                verifiedLabel.setText("Total number of verified user:  " + count);
             }
         });
 
-
-
-        pager.setDisplay(cellTable);
-
-        pager.setPageSize(4);
+        //pager.setPageSize(4);
 //        pager.
     }
 

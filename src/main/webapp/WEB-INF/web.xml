@@ -23,29 +23,29 @@
 
     <!-- Servlets -->
   
-  <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>administration.html</welcome-file>
-  </welcome-file-list>
+  <!--&lt;!&ndash; Default page to serve &ndash;&gt;-->
+  <!--<welcome-file-list>-->
+    <!--<welcome-file>administration.html</welcome-file>-->
+  <!--</welcome-file-list>-->
 
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Administration</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>
-                Admin
-            </role-name>
-        </auth-constraint>
-    </security-constraint>
+    <!--<security-constraint>-->
+        <!--<web-resource-collection>-->
+            <!--<web-resource-name>Administration</web-resource-name>-->
+            <!--<url-pattern>/*</url-pattern>-->
+        <!--</web-resource-collection>-->
+        <!--<auth-constraint>-->
+            <!--<role-name>-->
+                <!--Admin-->
+            <!--</role-name>-->
+        <!--</auth-constraint>-->
+    <!--</security-constraint>-->
 
-    <security-role>
-        <role-name>Admin</role-name>
-    </security-role>
+    <!--<security-role>-->
+        <!--<role-name>Admin</role-name>-->
+    <!--</security-role>-->
 
-    <login-config>
-        <auth-method>BASIC</auth-method>
-        <realm-name>Administration</realm-name>
-    </login-config>
+    <!--<login-config>-->
+        <!--<auth-method>BASIC</auth-method>-->
+        <!--<realm-name>Administration</realm-name>-->
+    <!--</login-config>-->
 </web-app>

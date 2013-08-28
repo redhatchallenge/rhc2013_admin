@@ -563,7 +563,7 @@ public class UserScreen extends Composite {
 
         verifiedColumn.setFieldUpdater(new FieldUpdater<Student, Boolean>() {
             @Override
-            public void update(int index, Student object, Boolean value) {
+            public void update(int index, final Student object, Boolean value) {
                 object.setVerified(value);
                 userService.updateStudentData(object, new AsyncCallback<Boolean>() {
                     @Override
@@ -576,8 +576,18 @@ public class UserScreen extends Composite {
                         if (!result) {
                             displayErrorBox("Failed", "Update has failed");
                         } else {
-                            cellTable.redraw();
-                            setUserCount();
+                            userService.assignTimeslotAndQuestions(object.getEmail(), new AsyncCallback<Void>() {
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    caught.printStackTrace();
+                                }
+
+                                @Override
+                                public void onSuccess(Void result) {
+                                    cellTable.redraw();
+                                    setUserCount();
+                                }
+                            });
                         }
                     }
                 });

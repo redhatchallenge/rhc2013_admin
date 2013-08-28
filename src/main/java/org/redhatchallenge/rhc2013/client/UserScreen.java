@@ -163,27 +163,6 @@ public class UserScreen extends Composite {
                     }
                 testing.setText(listOfSelectedStudents.toString());
                 }
-
-
-//                if (aBoolean == true){
-//                    for (int i=0;i<cellTable.getVisibleItemCount(); i++){
-//                        listOfSelectedStudents.add(cellTable.getVisibleItem(i));
-//                    }
-//
-//                    for (Student student : listOfSelectedStudents){
-//                        selectionModel.setSelected(student, aBoolean);
-//                    }
-//                    testing.setText(listOfSelectedStudents.toString());
-//                }
-//                else{
-//                    for (Student student : listOfSelectedStudents){
-//                        selectionModel.setSelected(student, false);
-//                    }
-//                    for (int i=0;i<cellTable.getVisibleItemCount(); i++){
-//                        listOfSelectedStudents.remove(cellTable.getVisibleItem(i));
-//                    }
-//                    testing.setText(listOfSelectedStudents.toString());
-//                }
             }
         });//End of checkbox
 

@@ -107,7 +107,6 @@ public class UserScreen extends Composite {
         List list = provider.getList();
 
         final MultiSelectionModel<Student> selectionModel = new MultiSelectionModel<Student>(KEY_PROVIDER);
-        cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Student> createCheckboxManager());
 
         Column<Student, Boolean> selectColumn = new Column<Student, Boolean>(new CheckboxCell(true, false)) {
             @Override
@@ -131,8 +130,9 @@ public class UserScreen extends Composite {
                 }
             }
         });
-         // checkbox header
-         Header<Boolean> selectAllHeader = new Header<Boolean>(new CheckboxCell(true, false)) {
+
+        // checkbox header
+        Header<Boolean> selectAllHeader = new Header<Boolean>(new CheckboxCell(true, false)) {
             @Override
             public Boolean getValue() {
                 for (Student student : cellTable.getVisibleItems()){
@@ -563,7 +563,7 @@ public class UserScreen extends Composite {
 
         verifiedColumn.setFieldUpdater(new FieldUpdater<Student, Boolean>() {
             @Override
-            public void update(int index, Student object, Boolean value) {
+            public void update(int index, final Student object, Boolean value) {
                 object.setVerified(value);
                 userService.updateStudentData(object, new AsyncCallback<Boolean>() {
                     @Override
@@ -576,8 +576,18 @@ public class UserScreen extends Composite {
                         if (!result) {
                             displayErrorBox("Failed", "Update has failed");
                         } else {
-                            cellTable.redraw();
-                            setUserCount();
+                            userService.assignTimeslotAndQuestions(object.getEmail(), new AsyncCallback<Void>() {
+                                @Override
+                                public void onFailure(Throwable caught) {
+                                    caught.printStackTrace();
+                                }
+
+                                @Override
+                                public void onSuccess(Void result) {
+                                    cellTable.redraw();
+                                    setUserCount();
+                                }
+                            });
                         }
                     }
                 });
@@ -630,6 +640,8 @@ public class UserScreen extends Composite {
         cellTable.addColumn(languageColumn, "Language");
         cellTable.addColumn(verifiedColumn, "Verified");
         cellTable.addColumn(statusColumn, "Status");
+
+        cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Student> createCheckboxManager(cellTable.getColumnIndex(selectColumn)));
     }
 
     @UiHandler("searchButton")

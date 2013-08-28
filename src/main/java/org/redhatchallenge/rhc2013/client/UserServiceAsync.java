@@ -21,4 +21,6 @@ public interface UserServiceAsync {
                          String lecturerEmail, String language, Boolean verified, AsyncCallback<Boolean> async);
 
     void exportCsv(List<Student> students, AsyncCallback<String> async);
+
+    void assignTimeslotAndQuestions(String email, AsyncCallback<Void> async);
 }

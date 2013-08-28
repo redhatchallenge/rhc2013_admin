@@ -4,6 +4,7 @@ import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SelectionCell;
+import com.google.gwt.cell.client.ValueUpdater;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -14,6 +15,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
+import com.google.gwt.user.cellview.client.Header;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -59,6 +61,7 @@ public class UserScreen extends Composite {
     @UiField MySimplePager pager;
     @UiField Label registrationLabel;
     @UiField Label verifiedLabel;
+    @UiField Label testing;
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
@@ -96,21 +99,22 @@ public class UserScreen extends Composite {
         });
 
         pager.setDisplay(cellTable);
-
-        pager.setPageSize(4);
+        pager.setPageSize(2);
     }
 
     private void initCellTable() {
 
         List list = provider.getList();
 
-        final SelectionModel<Student> selectionModel = new MultiSelectionModel<Student>(KEY_PROVIDER);
+        final MultiSelectionModel<Student> selectionModel = new MultiSelectionModel<Student>(KEY_PROVIDER);
         cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Student> createCheckboxManager());
 
         Column<Student, Boolean> selectColumn = new Column<Student, Boolean>(new CheckboxCell(true, false)) {
             @Override
             public Boolean getValue(Student student) {
+                testing.setText(listOfSelectedStudents + "");
                 return selectionModel.isSelected(student);
+
             }
         };
 
@@ -119,6 +123,7 @@ public class UserScreen extends Composite {
             public void update(int index, Student student, Boolean value) {
                 if(value) {
                     listOfSelectedStudents.add(student);
+                    testing.setText(listOfSelectedStudents + "");
                 }
 
                 else {
@@ -126,6 +131,40 @@ public class UserScreen extends Composite {
                 }
             }
         });
+         // checkbox header
+         Header<Boolean> selectAllHeader = new Header<Boolean>(new CheckboxCell(true, false)) {
+            @Override
+            public Boolean getValue() {
+                for (Student student : cellTable.getVisibleItems()){
+                    if (!selectionModel.isSelected(student)){
+                        return false;
+                    }
+                }
+                return cellTable.getVisibleItems().size() > 0;
+            }
+        };
+
+        selectAllHeader.setUpdater(new ValueUpdater<Boolean>() {
+            @Override
+            public void update(Boolean aBoolean) {
+                for(Student student : cellTable.getVisibleItems()){
+                    selectionModel.setSelected(student, aBoolean);
+                }
+                if (aBoolean == true){
+                    for (int i=0;i<cellTable.getVisibleItemCount(); i++){
+                        if (!listOfSelectedStudents.contains(cellTable.getVisibleItem(i)))
+                            listOfSelectedStudents.add(cellTable.getVisibleItem(i));
+                    }
+                    testing.setText(listOfSelectedStudents.toString());
+                }
+                else if (aBoolean == false){
+                    for (int i=0;i<cellTable.getVisibleItemCount(); i++){
+                        listOfSelectedStudents.remove(cellTable.getVisibleItem(i));
+                    }
+                testing.setText(listOfSelectedStudents.toString());
+                }
+            }
+        });//End of checkbox
 
         Column<Student, String> emailColumn = new Column<Student, String>(new EditTextCell()) {
             @Override
@@ -577,7 +616,7 @@ public class UserScreen extends Composite {
             }
         });
 
-        cellTable.addColumn(selectColumn);
+        cellTable.addColumn(selectColumn, selectAllHeader);
         cellTable.addColumn(emailColumn, "Email");
         cellTable.addColumn(firstNameColumn, "First Name");
         cellTable.addColumn(lastNameColumn, "Last Name");
@@ -723,6 +762,7 @@ public class UserScreen extends Composite {
                 }
             }
         });
+
     }
 
     @UiHandler("registerButton")

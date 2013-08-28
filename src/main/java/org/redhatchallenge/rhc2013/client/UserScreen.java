@@ -14,9 +14,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.Header;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
@@ -32,7 +30,6 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
-import com.google.gwt.view.client.SelectionModel;
 import org.redhatchallenge.rhc2013.shared.Student;
 
 import java.util.ArrayList;
@@ -99,7 +96,7 @@ public class UserScreen extends Composite {
         });
 
         pager.setDisplay(cellTable);
-        pager.setPageSize(2);
+        pager.setPageSize(8);
     }
 
     private void initCellTable() {
@@ -107,6 +104,10 @@ public class UserScreen extends Composite {
         List list = provider.getList();
 
         final MultiSelectionModel<Student> selectionModel = new MultiSelectionModel<Student>(KEY_PROVIDER);
+
+        ListHandler<Student> sortHandler = new ListHandler<Student>(list);
+        cellTable.addColumnSortHandler(sortHandler);
+
 
         Column<Student, Boolean> selectColumn = new Column<Student, Boolean>(new CheckboxCell(true, false)) {
             @Override
@@ -174,9 +175,7 @@ public class UserScreen extends Composite {
         };
 
         emailColumn.setSortable(true);
-        emailColumn.setDefaultSortAscending(false);
-        final ListHandler<Student> emailSortHandler = new ListHandler<Student>(list);
-        emailSortHandler.setComparator(emailColumn, new Comparator<Student>() {
+        sortHandler.setComparator(emailColumn, new Comparator<Student>() {
             @Override
             public int compare(Student o1, Student o2) {
                 if (o1 == o2) {
@@ -188,9 +187,6 @@ public class UserScreen extends Composite {
                 return -1;
             }
         });
-
-        cellTable.addColumnSortHandler(emailSortHandler);
-        cellTable.getColumnSortList().push(emailColumn);
 
         emailColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
@@ -223,6 +219,21 @@ public class UserScreen extends Composite {
             }
         };
 
+        firstNameColumn.setSortable(true);
+        sortHandler.setComparator(firstNameColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getFirstName().compareTo(o2.getFirstName()) : 1;
+                }
+                return -1;
+            }
+        });
+
+
         firstNameColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
             public void update(int index, Student object, String value) {
@@ -253,6 +264,20 @@ public class UserScreen extends Composite {
                 return student.getLastName();
             }
         };
+
+        lastNameColumn.setSortable(true);
+        sortHandler.setComparator(lastNameColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getLastName().compareTo(o2.getLastName()) : 1;
+                }
+                return -1;
+            }
+        });
 
         lastNameColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
@@ -298,6 +323,20 @@ public class UserScreen extends Composite {
                 return student.getCountry();
             }
         };
+
+        countryColumn.setSortable(true);
+        sortHandler.setComparator(countryColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getCountry().compareTo(o2.getCountry()) : 1;
+                }
+                return -1;
+            }
+        });
 
         countryColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
@@ -369,6 +408,20 @@ public class UserScreen extends Composite {
             }
         };
 
+        contactColumn.setSortable(true);
+        sortHandler.setComparator(contactColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getContact().compareTo(o2.getContact()) : 1;
+                }
+                return -1;
+            }
+        });
+
         contactColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
             public void update(int index, Student object, String value) {
@@ -400,6 +453,21 @@ public class UserScreen extends Composite {
             }
         };
 
+
+        schoolColumn.setSortable(true);
+        sortHandler.setComparator(schoolColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getSchool().compareTo(o2.getSchool()) : 1;
+                }
+                return -1;
+            }
+        });
+
         schoolColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
             public void update(int index, Student object, String value) {
@@ -430,6 +498,21 @@ public class UserScreen extends Composite {
                 return student.getLecturerFirstName();
             }
         };
+
+
+        lecturerFirstNameColumn.setSortable(true);
+        sortHandler.setComparator(lecturerFirstNameColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getLecturerFirstName().compareTo(o2.getLecturerFirstName()) : 1;
+                }
+                return -1;
+            }
+        });
 
         lecturerFirstNameColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
@@ -463,6 +546,20 @@ public class UserScreen extends Composite {
         };
 
 
+        lecturerLastNameColumn.setSortable(true);
+        sortHandler.setComparator(lecturerLastNameColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getLecturerLastName().compareTo(o2.getLecturerLastName()) : 1;
+                }
+                return -1;
+            }
+        });
+
         lecturerLastNameColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
             public void update(int index, Student object, String value) {
@@ -493,6 +590,20 @@ public class UserScreen extends Composite {
                 return student.getLecturerEmail();
             }
         };
+
+        lecturerEmailColumn.setSortable(true);
+        sortHandler.setComparator(lecturerEmailColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getLecturerEmail().compareTo(o2.getLecturerEmail()) : 1;
+                }
+                return -1;
+            }
+        });
 
         lecturerEmailColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
@@ -529,6 +640,21 @@ public class UserScreen extends Composite {
                 return student.getLanguage();
             }
         };
+
+
+        languageColumn.setSortable(true);
+        sortHandler.setComparator(languageColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? o1.getLanguage().compareTo(o2.getLanguage()) : 1;
+                }
+                return -1;
+            }
+        });
 
         languageColumn.setFieldUpdater(new FieldUpdater<Student, String>() {
             @Override
@@ -770,6 +896,8 @@ public class UserScreen extends Composite {
                     }
                     studentList.removeAll(toBeRemoved);
                     provider.setList(studentList);
+                    listOfSelectedStudents.clear(); //remove list of selected & deleted users
+                    testing.setText(listOfSelectedStudents.toString());
                     setUserCount();
                 }
             }

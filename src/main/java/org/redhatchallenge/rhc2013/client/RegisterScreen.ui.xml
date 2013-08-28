@@ -102,7 +102,7 @@
                    <td><g:Button ui:field="backButton" text="Back"/></td>
                </tr>
                <tr>
-                   <td><g:Label ui:field="messageLabel"/></td>
+                   <td colspan="4"><g:Label ui:field="messageLabel"/></td>
                </tr>
            </table>
        </center>

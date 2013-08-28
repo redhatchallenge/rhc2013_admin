@@ -2,9 +2,16 @@ package org.redhatchallenge.rhc2013.server;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.apache.commons.lang3.ArrayUtils;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.type.StandardBasicTypes;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.redhatchallenge.rhc2013.client.UserService;
 import org.redhatchallenge.rhc2013.shared.Student;
 
@@ -14,7 +21,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -155,6 +165,32 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
         }
     }
 
+    @Override
+    public void assignTimeslotAndQuestions(String email) throws IllegalArgumentException {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+
+        try {
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Student.class);
+            criteria.add(Restrictions.eq("email", email));
+            Student student = (Student)criteria.uniqueResult();
+
+            Set<Integer> questions = randomQuestions();
+            Integer[] arr = questions.toArray(new Integer[questions.size()]);
+            int[] questionsArray = ArrayUtils.toPrimitive(arr);
+
+            String timeslot = assignTimeslot(student.getCountry());
+
+            student.setTimeslot(convertTimeSlot(timeslot));
+            student.setQuestions(questionsArray);
+
+            session.update(student);
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            session.getTransaction().rollback();
+        }
+    }
+
     /**
      * Converts a Student entity to a String[] representation.
      *
@@ -180,5 +216,105 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
         strings[13] = student.getStatus().toString();
 
         return strings;
+    }
+
+    /**
+     * Randomly generate a set of 150 questions based on the
+     * given set of 500 questions.
+     *
+     * @return  Set of 150 random questions.
+     */
+    private Set<Integer> randomQuestions() {
+
+        Random rand = new Random();
+        int max;
+        int min;
+
+        Set<Integer> listOfQuestions = new HashSet<Integer>();
+        int levelOne = 69;
+        int levelTwo = 52;
+        int levelThree = 29;
+
+        while(listOfQuestions.size()<levelOne) {
+
+            max = 230;
+            min = 1;
+            listOfQuestions.add(rand.nextInt(max - min + 1) + min);
+        }
+
+        while(listOfQuestions.size()<levelOne + levelTwo) {
+            max = 406;
+            min = 231;
+            listOfQuestions.add(rand.nextInt(max - min + 1) + min);
+        }
+
+        while(listOfQuestions.size()<levelOne + levelTwo + levelThree) {
+            max = 500;
+            min = 407;
+            listOfQuestions.add(rand.nextInt(max - min + 1) + min);
+        }
+
+        return listOfQuestions;
+    }
+
+    /**
+     * Assigns time slot based on the country
+     *
+     * @param country  Input country
+     * @return  Assigned time slot. Null if none available
+     */
+    private String assignTimeslot(String country) {
+
+        if(country.substring(0,5).equalsIgnoreCase("china")) {
+            return null;
+        }
+
+        else {
+            Session currentSession = HibernateUtil.getSessionFactory().getCurrentSession();
+
+            try {
+                SQLQuery query = currentSession.createSQLQuery("select count(*) from contestant where country not like 'China%'");
+                int result = (Integer) query.addScalar("count", StandardBasicTypes.INTEGER).uniqueResult();
+
+                if(result <=300) {
+                    return "A1";
+                }
+
+                else if(result <= 600) {
+                    return "A2";
+                }
+
+                else {
+                    return null;
+                }
+            } catch (HibernateException e) {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Converts assigned time slot into an actual time value.
+     *
+     * @param timeslot  Timeslot to be converted
+     * @return  Actual time value in millisecond format
+     */
+    private long convertTimeSlot(String timeslot) {
+
+        DateTimeZone.setDefault(DateTimeZone.UTC);
+
+        if(timeslot == null) {
+            return 0;
+        }
+
+        if(timeslot.equalsIgnoreCase("A1")) {
+            DateTime a1Time = new DateTime(2013, 10, 24, 6, 0);
+            return a1Time.toInstant().getMillis();
+        }
+
+        else {
+            DateTime a2Time = new DateTime(2013, 10, 24, 8, 0);
+            return a2Time.toInstant().getMillis();
+        }
     }
 }

@@ -22,6 +22,8 @@ public interface UserService extends RemoteService {
                                  String lecturerEmail, String language, Boolean verified) throws IllegalArgumentException;
 
     String exportCsv(List<Student> students) throws IllegalArgumentException;
+    void assignTimeslotAndQuestions(String email) throws IllegalArgumentException;
+
 
     public static class Util {
         private static final UserServiceAsync Instance = (UserServiceAsync) GWT.create(UserService.class);

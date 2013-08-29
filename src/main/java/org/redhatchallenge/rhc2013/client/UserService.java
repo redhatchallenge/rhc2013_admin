@@ -17,6 +17,7 @@ public interface UserService extends RemoteService {
     List<Student> getListOfStudents() throws IllegalArgumentException;
     Boolean updateStudentData(Student student) throws IllegalArgumentException;
     Boolean deleteStudents(List<Student> students) throws IllegalArgumentException;
+    Boolean assignTimeSlot(List<Student> students, String timeSlot) throws IllegalArgumentException;
     public Boolean registerStudent(String email, String password, String firstName, String lastName, String contact,
                                  String country, String countryCode, String school, String lecturerFirstName, String lecturerLastName,
                                  String lecturerEmail, String language, Boolean verified) throws IllegalArgumentException;

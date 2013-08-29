@@ -1,14 +1,11 @@
 package org.redhatchallenge.rhc2013.client;
 
-import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.EditTextCell;
-import com.google.gwt.cell.client.FieldUpdater;
-import com.google.gwt.cell.client.SelectionCell;
-import com.google.gwt.cell.client.ValueUpdater;
+import com.google.gwt.cell.client.*;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -34,6 +31,7 @@ import org.redhatchallenge.rhc2013.shared.Student;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import static com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
@@ -59,6 +57,8 @@ public class UserScreen extends Composite {
     @UiField Label registrationLabel;
     @UiField Label verifiedLabel;
     @UiField Label testing;
+    @UiField ListBox timeSlotList;
+    @UiField Button timeSlotButton;
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
@@ -492,6 +492,19 @@ public class UserScreen extends Composite {
             }
         });
 
+        Column<Student, String> timeSlotColumn = new Column<Student, String>(new TextCell()) {
+            @Override
+            public String getValue(Student student) {
+                if(student.getTimeslot() == 0){
+                    return "Time Slot is not Assigned";
+                }
+                else{
+                    Date date = new Date(student.getTimeslot());
+                    return DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(date);
+                }
+            }
+        };
+
         Column<Student, String> lecturerFirstNameColumn = new Column<Student, String>(new EditTextCell()) {
             @Override
             public String getValue(Student student) {
@@ -760,6 +773,7 @@ public class UserScreen extends Composite {
         cellTable.addColumn(countryCodeColumn, "Country Code");
         cellTable.addColumn(contactColumn, "Contact");
         cellTable.addColumn(schoolColumn, "School");
+        cellTable.addColumn(timeSlotColumn, "Time Slot");
         cellTable.addColumn(lecturerFirstNameColumn, "Lecturer's First Name");
         cellTable.addColumn(lecturerLastNameColumn, "Lecturer's Last Name");
         cellTable.addColumn(lecturerEmailColumn, "Lecturer's Email");
@@ -871,6 +885,32 @@ public class UserScreen extends Composite {
 
             provider.setList(list);
         }
+    }
+
+    @UiHandler("timeSlotButton")
+    public void handleTimeSlotButtonClick(ClickEvent event) {
+        final String timeSlot = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
+
+        userService.assignTimeSlot(listOfSelectedStudents, timeSlot, new AsyncCallback<Boolean>() {
+            @Override
+            public void onFailure(Throwable caught) {
+                caught.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(Boolean result) {
+                if(!result) {
+                    displayErrorBox("Error", "Unable to Assign Time Slot");
+                }
+
+                else {
+                    registrationLabel.setText("Thank You");
+                    ContentContainer.INSTANCE.setContent(new UserScreen());
+                }
+            }
+        });
+
+        cellTable.redraw();
     }
 
     @UiHandler("deleteButton")

@@ -1,3 +1,5 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:c="urn:import:com.google.gwt.user.cellview.client"
@@ -7,42 +9,59 @@
         <center>
             <g:Label ui:field="registrationLabel"/>
             <g:Label ui:field="verifiedLabel"/>
-            <g:Label ui:field="testing"/>
+            &nbsp;
         </center>
+        <table>
+        <tr>
+            <td>
+            Search:
+            <g:TextBox ui:field="searchField"/>
+            <g:ListBox ui:field="searchTerms" visibleItemCount="1">
+                <g:item value="1">Please Select</g:item>
+                <g:item value="1">Email</g:item>
+                <g:item value="2">First Name</g:item>
+                <g:item value="3">Last Name</g:item>
+                <g:item value="4">Contact</g:item>
+                <g:item value="5">Country</g:item>
+                <g:item value="6">Country Code</g:item>
+                <g:item value="7">School</g:item>
+                <g:item value="8">Lecturer's First Name</g:item>
+                <g:item value="9">Lecturer's Last Name</g:item>
+                <g:item value="10">Lecturer's Email</g:item>
+                 <g:item value="11">Language</g:item>
+             </g:ListBox>
 
-        <g:TextBox ui:field="searchField"/>
-        <g:ListBox ui:field="searchTerms" visibleItemCount="1">
-            <g:item value="1">Email</g:item>
-            <g:item value="2">First Name</g:item>
-            <g:item value="3">Last Name</g:item>
-            <g:item value="4">Contact</g:item>
-            <g:item value="5">Country</g:item>
-            <g:item value="6">Country Code</g:item>
-            <g:item value="7">School</g:item>
-            <g:item value="8">Lecturer's First Name</g:item>
-            <g:item value="9">Lecturer's Last Name</g:item>
-            <g:item value="10">Lecturer's Email</g:item>
-            <g:item value="11">Language</g:item>
-        </g:ListBox>
-        <g:Button ui:field="searchButton" text="Search"/><br/>
-        <g:Button ui:field="deleteButton" text="Delete"/>
-        <g:Button ui:field="registerButton" text="Add"/>
-        <g:Button ui:field="exportButton" text="Export"/>
-        <g:Button ui:field="refreshButton" text="Refresh"/>
-        <g:ListBox ui:field="timeSlotList" visibleItemCount="1">
-            <g:item value="1">23 October 2013, 9am to 10am</g:item>
-            <g:item value="2">23 October 2013, 10:15AM to 11:15AM</g:item>
-            <g:item value="3">23 October 2013, 11:30AM to 12:30PM</g:item>
-            <g:item value="4">23 October 2013, 12:45PM to 13:45pm</g:item>
-            <g:item value="5">23 October 2013, 14:00PM to 15:00PM</g:item>
-            <g:item value="6">23 October 2013, 15:15PM to 16:15PM</g:item>
-            <g:item value="7">23 October 2013, 16:30PM to 17:30PM</g:item>
-            <g:item value="8">23 October 2013, 17:45PM to 18:45PM</g:item>
-            <g:item value="9">23 October 2013, 19:00PM to 20:00PM</g:item>
-            <g:item value="10">23 October 2013, 20:15PM to 21:15PM</g:item>
-        </g:ListBox>
-        <g:Button ui:field="timeSlotButton" text="Assign"/><br/>
+
+            <g:Button ui:field="searchButton" text="Search"/><br/>
+             Time Slot:
+                <g:ListBox ui:field="timeSlotList" visibleItemCount="1">
+                    <g:item value="1">Please Select a Time Slot</g:item>
+                    <g:item value="1">23 October 2013, 9:00am to 10:00am</g:item>
+                    <g:item value="2">23 October 2013, 10:15AM to 11:15AM</g:item>
+                    <g:item value="3">23 October 2013, 11:30AM to 12:30PM</g:item>
+                    <g:item value="4">23 October 2013, 12:45PM to 13:45pm</g:item>
+                    <g:item value="5">23 October 2013, 14:00PM to 15:00PM</g:item>
+                    <g:item value="6">23 October 2013, 15:15PM to 16:15PM</g:item>
+                    <g:item value="7">23 October 2013, 16:30PM to 17:30PM</g:item>
+                    <g:item value="8">23 October 2013, 17:45PM to 18:45PM</g:item>
+                    <g:item value="9">23 October 2013, 19:00PM to 20:00PM</g:item>
+                    <g:item value="10">23 October 2013, 20:15PM to 21:15PM</g:item>
+                </g:ListBox>
+                <g:Button ui:field="timeSlotButton" text="Assign"/><br/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+            <g:Button ui:field="deleteButton" text="Delete"/>
+            <g:Button ui:field="registerButton" text="Add"/>
+            <g:Button ui:field="TimeSlotMngButton" text="Time Slot Management"/>
+            <g:Button ui:field="exportButton" text="Export"/>
+            <g:Button ui:field="refreshButton" text="Refresh"/>
+            </td>
+        </tr>
+
         <c:CellTable ui:field="cellTable"/>
         <z:MySimplePager location="CENTER" fastForwardRows="0" showFastForwardButton="false" showLastPageButton="true"  ui:field="pager"/>
+        </table>
     </g:HTMLPanel>
 </ui:UiBinder>

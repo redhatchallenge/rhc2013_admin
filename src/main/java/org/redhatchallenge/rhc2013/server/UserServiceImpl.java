@@ -163,13 +163,24 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
             return unixTime;
         }
 
-        else{
+        else if (timeSlot.equalsIgnoreCase("23 October 2013, 20:15PM to 21.15PM")){
             time = new DateTime(2013, 10, 23, 12, 15);
             unixTime = time.toInstant().getMillis();
             return unixTime;
         }
-    }
 
+        else if (timeSlot.equalsIgnoreCase("24 October 2013, 14:00PM to 15.00PM")){
+            time = new DateTime(2013, 10, 24, 6, 00);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else {
+            time = new DateTime(2013, 10, 24, 8, 00);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+    }
 
     @Override
     public Boolean registerStudent(String email, String password, String firstName, String lastName,

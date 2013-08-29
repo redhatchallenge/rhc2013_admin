@@ -101,7 +101,7 @@ public class TimeslotScreen extends Composite {
     }
 
     private void initTimeslotCellTable(){
-        list = provider.getList();
+        List list = provider.getList();
 
         final MultiSelectionModel<Student> selectionModel = new MultiSelectionModel<Student>(KEY_PROVIDER);
 

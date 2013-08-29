@@ -307,12 +307,11 @@ public class UserScreen extends Composite {
             countryList.add("Singapore");
             countryList.add("Malaysia");
             countryList.add("Thailand");
-            countryList.add("China/Region 1");
-            countryList.add("China/Region 2");
-            countryList.add("China/Region 3");
-            countryList.add("China/Region 4");
-            countryList.add("China/Region 5");
-            countryList.add("China/Region 6");
+            countryList.add("China/Beijing");
+            countryList.add("China/Shanghai");
+            countryList.add("China/Wuhan");
+            countryList.add("China/Dalian");
+            countryList.add("China/Jinan");
             countryList.add("China/Others");
             countryList.add("Hong Kong");
             countryList.add("Taiwan");
@@ -783,7 +782,7 @@ public class UserScreen extends Composite {
         cellTable.addColumn(emailColumn, "Email");
         cellTable.addColumn(firstNameColumn, "First Name");
         cellTable.addColumn(lastNameColumn, "Last Name");
-        cellTable.addColumn(countryColumn, "Country");
+        cellTable.addColumn(countryColumn, "Region");
         cellTable.addColumn(countryCodeColumn, "Country Code");
         cellTable.addColumn(contactColumn, "Contact");
         cellTable.addColumn(schoolColumn, "School");

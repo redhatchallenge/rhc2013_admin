@@ -1,0 +1,55 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:z="urn:import:org.redhatchallenge.rhc2013.client">
+    <g:HTMLPanel>
+        <h1>Timeslot Management</h1>
+
+
+                <tr>
+                    <td>Country:</td>
+                    <td>
+                        <g:ListBox ui:field="countryField" visibleItemCount="1">
+                            <g:item value="1">Singapore</g:item>
+                            <g:item value="2">Malaysia</g:item>
+                            <g:item value="3">Thailand</g:item>
+                            <g:item value="4">China</g:item>
+                            <g:item value="5">Hong Kong</g:item>
+                            <g:item value="6">Taiwan</g:item>
+                        </g:ListBox>
+                    </td>
+                    <td>
+                        <g:ListBox ui:field="regionField" visibleItemCount="1" visible="false">
+                            <g:item value="1">Please Select</g:item>
+                            <g:item value="2">Beijing</g:item>
+                            <g:item value="3">Shanghai</g:item>
+                            <g:item value="4">Wuhan</g:item>
+                            <g:item value="5">Dalian</g:item>
+                            <g:item value="6">Jinan</g:item>
+                            <g:item value="7">Others</g:item>
+                        </g:ListBox><br/>
+                    </td>
+                </tr>
+                <!--<tr>-->
+                <!--<td>-->
+                <!--<g:ListBox ui:field="timeslotField" visibleItemCount="1">-->
+                <!--<g:item value="1">23 Oct 2013 09:00:00 GMT</g:item>-->
+                <!--<g:item value="2">23 Oct 2013 10:15:00 GMT</g:item>-->
+                <!--<g:item value="3">23 Oct 2013 11:30:00 GMT</g:item>-->
+                <!--<g:item value="4">23 Oct 2013 12:45:00 GMT</g:item>-->
+                <!--<g:item value="5">23 Oct 2013 14:00:00 GMT</g:item>-->
+                <!--<g:item value="6">23 Oct 2013 15:15:00 GMT</g:item>-->
+                <!--<g:item value="7">23 Oct 2013 16:30:00 GMT</g:item>-->
+                <!--<g:item value="8">23 Oct 2013 17:45:00 GMT</g:item>-->
+                <!--<g:item value="9">23 Oct 2013 19:00:00 GMT</g:item>-->
+                <!--<g:item value="10">23 Oct 2013 20:15:00 GMT</g:item>-->
+                <!--</g:ListBox><br/>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <tr>
+                    <td>&nbsp;</td>
+                    <td><g:Label ui:field="noTimeslot"/></td>
+                </tr>
+    </g:HTMLPanel>
+</ui:UiBinder>

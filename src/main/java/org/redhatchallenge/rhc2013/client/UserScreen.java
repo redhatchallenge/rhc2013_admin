@@ -62,6 +62,7 @@ public class UserScreen extends Composite {
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
+    private List<Student> origStudentList;
     private ListDataProvider<Student> provider;
     private List<Student> listOfSelectedStudents = new ArrayList<Student>();
     private static final ProvidesKey<Student> KEY_PROVIDER = new ProvidesKey<Student>() {
@@ -85,7 +86,6 @@ public class UserScreen extends Composite {
             public void onSuccess(List<Student> result) {
 
                 studentList = result;
-
                 setUserCount();
 
                 provider = new ListDataProvider<Student>(studentList);
@@ -896,7 +896,8 @@ public class UserScreen extends Composite {
                 }
             }
 
-            provider.setList(list);
+            provider.getList().clear();
+            provider.getList().addAll(list);
         }
     }
 

@@ -61,6 +61,7 @@ public class TimeslotScreen extends Composite {
 
 
     private UserServiceAsync userService = UserService.Util.getInstance();
+    private List<Student> origStudentList;
     private List<Student> studentList;
     private ListDataProvider<Student> provider;
     private List<Student> selectedStudentList = new ArrayList<Student>();
@@ -84,6 +85,7 @@ public class TimeslotScreen extends Composite {
 
             @Override
             public void onSuccess(List<Student> students) {
+                origStudentList = new ArrayList<Student>(students);
                 studentList = students;
                 for (Student s : studentList){
                     list.add(s);
@@ -277,12 +279,12 @@ public class TimeslotScreen extends Composite {
     @UiHandler("countryField")
     public void handleCountryChange(ChangeEvent event) {
         String contains;
+        list.clear();
         switch (countryField.getSelectedIndex()) {
             //Do nothing
             case 0:
-                list.clear();
-                for (Student s : studentList){
-                        list.add(s);
+                for (Student s : origStudentList){
+                    list.add(s);
                 }
                 break;
 
@@ -290,8 +292,7 @@ public class TimeslotScreen extends Composite {
             case 1:
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
-                list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().equals(contains)){
                         list.add(s);
                     }
@@ -302,8 +303,7 @@ public class TimeslotScreen extends Composite {
             case 2:
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
-                list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().equals(contains)){
                         list.add(s);
                     }
@@ -314,8 +314,7 @@ public class TimeslotScreen extends Composite {
             case 3:
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
-                list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().equals(contains)){
                         list.add(s);
                     }
@@ -326,8 +325,7 @@ public class TimeslotScreen extends Composite {
             case 4:
                 regionField.setVisible(true);
                 contains = countryField.getItemText(countryField.getSelectedIndex());
-                list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().contains(contains)){
                         list.add(s);
                     }
@@ -338,8 +336,7 @@ public class TimeslotScreen extends Composite {
             case 5:
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
-                list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().equals(contains)){
                         list.add(s);
                     }
@@ -350,8 +347,7 @@ public class TimeslotScreen extends Composite {
             case 6:
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
-                list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().equals(contains)){
                         list.add(s);
                     }
@@ -359,7 +355,8 @@ public class TimeslotScreen extends Composite {
                 regionField.setSelectedIndex(0);
                 break;
         }
-        provider.setList(list);
+        provider.getList().clear();
+        provider.getList().addAll(list);
     }
 
 
@@ -370,7 +367,7 @@ public class TimeslotScreen extends Composite {
         switch (regionField.getSelectedIndex()) {
             case 0:
                 list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().contains("China")){
                         list.add(s);
                     }
@@ -381,7 +378,7 @@ public class TimeslotScreen extends Composite {
                 region = "Beijing";
                 contains = regionField.getItemText(regionField.getSelectedIndex());
                 list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().contains(contains)){
                         list.add(s);
                     }
@@ -393,7 +390,7 @@ public class TimeslotScreen extends Composite {
                 region = "Shanghai";
                 contains = regionField.getItemText(regionField.getSelectedIndex());
                 list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().contains(contains)){
                         list.add(s);
                     }
@@ -405,7 +402,7 @@ public class TimeslotScreen extends Composite {
                 region = "Wuhan";
                 contains = regionField.getItemText(regionField.getSelectedIndex());
                 list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().contains(contains)){
                         list.add(s);
                     }
@@ -417,7 +414,7 @@ public class TimeslotScreen extends Composite {
                 region = "Dalian";
                 contains = regionField.getItemText(regionField.getSelectedIndex());
                 list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().contains(contains)){
                         list.add(s);
                     }
@@ -429,7 +426,7 @@ public class TimeslotScreen extends Composite {
                 region = "Jinan";
                 contains = regionField.getItemText(regionField.getSelectedIndex());
                 list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().contains(contains)){
                         list.add(s);
                     }
@@ -441,7 +438,7 @@ public class TimeslotScreen extends Composite {
                 region = "Others";
                 contains = regionField.getItemText(regionField.getSelectedIndex());
                 list.clear();
-                for (Student s : studentList){
+                for (Student s : origStudentList){
                     if (s.getCountry().contains(contains)){
                         list.add(s);
                     }
@@ -449,7 +446,9 @@ public class TimeslotScreen extends Composite {
                 countContestant(region);
                 break;
         }
-        provider.setList(list);
+        provider.getList().clear();
+        provider.getList().addAll(list);
+//        timeslotCellTable.redraw();
     }
 
 

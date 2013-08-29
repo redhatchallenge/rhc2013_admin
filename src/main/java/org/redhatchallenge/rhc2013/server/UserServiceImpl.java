@@ -86,6 +86,92 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
     }
 
     @Override
+    public Boolean assignTimeSlot(List<Student> students, String timeSlot) throws IllegalArgumentException {
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        session.beginTransaction();
+        try {
+            for(Student s : students) {
+                s.setTimeslot(convertTimeSlotOthers(timeSlot));
+                session.update(s);
+            }
+            session.getTransaction().commit();
+            return true;
+        }
+
+        catch (HibernateException e) {
+            session.getTransaction().rollback();
+            return false;
+        }
+    }
+
+    private Long convertTimeSlotOthers(String timeSlot){
+        DateTimeZone.setDefault(DateTimeZone.UTC);
+        DateTime time;
+        Long unixTime;
+
+        if(timeSlot.equalsIgnoreCase("23 October 2013, 9am to 10am")){
+            time = new DateTime(2013, 10, 23, 1, 0);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else if(timeSlot.equalsIgnoreCase("23 October 2013, 10:15AM to 11:15AM")){
+            time = new DateTime(2013, 10, 23, 2, 15);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else if(timeSlot.equalsIgnoreCase("23 October 2013, 11:30AM to 12:30PM")){
+            time = new DateTime(2013, 10, 23, 3, 30);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else if(timeSlot.equalsIgnoreCase("23 October 2013, 12:45PM to 13:45pm")){
+            time = new DateTime(2013, 10, 23, 4, 45);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else if(timeSlot.equalsIgnoreCase("23 October 2013, 14:00PM to 15:00PM")){
+            time = new DateTime(2013, 10, 23, 6, 0);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else if(timeSlot.equalsIgnoreCase("23 October 2013, 15:15PM to 16:15PM")){
+            time = new DateTime(2013, 10, 23, 7, 15);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else if(timeSlot.equalsIgnoreCase("23 October 2013, 16:30PM to 17:30PM")){
+            time = new DateTime(2013, 10, 23, 8, 30);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else if(timeSlot.equalsIgnoreCase("23 October 2013, 17:45PM to 18:45PM")){
+            time = new DateTime(2013, 10, 23, 9, 45);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else if(timeSlot.equalsIgnoreCase("23 October 2013, 19:00PM to 20:00PM")){
+            time = new DateTime(2013, 10, 23, 11, 0);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+
+        else{
+            time = new DateTime(2013, 10, 23, 12, 15);
+            unixTime = time.toInstant().getMillis();
+            return unixTime;
+        }
+    }
+
+
+    @Override
     public Boolean registerStudent(String email, String password, String firstName, String lastName,
                                    String contact, String country, String countryCode, String school,
                                    String lecturerFirstName, String lecturerLastName, String lecturerEmail,

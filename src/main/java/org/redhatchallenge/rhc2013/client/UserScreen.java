@@ -56,9 +56,10 @@ public class UserScreen extends Composite {
     @UiField MySimplePager pager;
     @UiField Label registrationLabel;
     @UiField Label verifiedLabel;
-    @UiField Label testing;
     @UiField ListBox timeSlotList;
     @UiField Button timeSlotButton;
+    @UiField Button TimeSlotMngButton;
+
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
@@ -112,7 +113,6 @@ public class UserScreen extends Composite {
         Column<Student, Boolean> selectColumn = new Column<Student, Boolean>(new CheckboxCell(true, false)) {
             @Override
             public Boolean getValue(Student student) {
-                testing.setText(listOfSelectedStudents + "");
                 return selectionModel.isSelected(student);
 
             }
@@ -123,7 +123,6 @@ public class UserScreen extends Composite {
             public void update(int index, Student student, Boolean value) {
                 if(value) {
                     listOfSelectedStudents.add(student);
-                    testing.setText(listOfSelectedStudents + "");
                 }
 
                 else {
@@ -156,13 +155,11 @@ public class UserScreen extends Composite {
                         if (!listOfSelectedStudents.contains(cellTable.getVisibleItem(i)))
                             listOfSelectedStudents.add(cellTable.getVisibleItem(i));
                     }
-                    testing.setText(listOfSelectedStudents.toString());
                 }
                 else if (aBoolean == false){
                     for (int i=0;i<cellTable.getVisibleItemCount(); i++){
                         listOfSelectedStudents.remove(cellTable.getVisibleItem(i));
                     }
-                testing.setText(listOfSelectedStudents.toString());
                 }
             }
         });//End of checkbox
@@ -307,12 +304,11 @@ public class UserScreen extends Composite {
             countryList.add("Singapore");
             countryList.add("Malaysia");
             countryList.add("Thailand");
-            countryList.add("China/Region 1");
-            countryList.add("China/Region 2");
-            countryList.add("China/Region 3");
-            countryList.add("China/Region 4");
-            countryList.add("China/Region 5");
-            countryList.add("China/Region 6");
+            countryList.add("China/Beijing");
+            countryList.add("China/Shanghai");
+            countryList.add("China/Wuhan");
+            countryList.add("China/Dalian");
+            countryList.add("China/Jinan");
             countryList.add("China/Others");
             countryList.add("Hong Kong");
             countryList.add("Taiwan");
@@ -350,11 +346,9 @@ public class UserScreen extends Composite {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if(!result) {
+                        if (!result) {
                             displayErrorBox("Failed", "Update has failed");
-                        }
-
-                        else {
+                        } else {
                             cellTable.redraw();
                         }
                     }
@@ -434,11 +428,9 @@ public class UserScreen extends Composite {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if(!result) {
+                        if (!result) {
                             displayErrorBox("Failed", "Update has failed");
-                        }
-
-                        else {
+                        } else {
                             cellTable.redraw();
                         }
                     }
@@ -480,11 +472,9 @@ public class UserScreen extends Composite {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if(!result) {
+                        if (!result) {
                             displayErrorBox("Failed", "Update has failed");
-                        }
-
-                        else {
+                        } else {
                             cellTable.redraw();
                         }
                     }
@@ -504,6 +494,20 @@ public class UserScreen extends Composite {
                 }
             }
         };
+
+        timeSlotColumn.setSortable(true);
+        sortHandler.setComparator(timeSlotColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? String.valueOf(o1.getTimeslot()).compareTo(String.valueOf(o2.getTimeslot())) : 1;
+                }
+                return -1;
+            }
+        });
 
         Column<Student, String> lecturerFirstNameColumn = new Column<Student, String>(new EditTextCell()) {
             @Override
@@ -727,6 +731,7 @@ public class UserScreen extends Composite {
                                     setUserCount();
                                 }
                             });
+
                         }
                     }
                 });
@@ -769,7 +774,7 @@ public class UserScreen extends Composite {
         cellTable.addColumn(emailColumn, "Email");
         cellTable.addColumn(firstNameColumn, "First Name");
         cellTable.addColumn(lastNameColumn, "Last Name");
-        cellTable.addColumn(countryColumn, "Country");
+        cellTable.addColumn(countryColumn, "Region");
         cellTable.addColumn(countryCodeColumn, "Country Code");
         cellTable.addColumn(contactColumn, "Contact");
         cellTable.addColumn(schoolColumn, "School");
@@ -937,7 +942,6 @@ public class UserScreen extends Composite {
                     studentList.removeAll(toBeRemoved);
                     provider.setList(studentList);
                     listOfSelectedStudents.clear(); //remove list of selected & deleted users
-                    testing.setText(listOfSelectedStudents.toString());
                     setUserCount();
                 }
             }
@@ -948,6 +952,11 @@ public class UserScreen extends Composite {
     @UiHandler("registerButton")
     public void handleRegisterButtonClick(ClickEvent event) {
         ContentContainer.INSTANCE.setContent(new RegisterScreen());
+    }
+
+    @UiHandler("TimeSlotMngButton")
+    public void handleTimeSlotMngButtonClick(ClickEvent event) {
+        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
     }
 
     @UiHandler("exportButton")

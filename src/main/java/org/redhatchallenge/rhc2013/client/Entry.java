@@ -9,6 +9,6 @@ public class Entry implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
-        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
+        ContentContainer.INSTANCE.setContent(new UserScreen());
     }
 }

@@ -505,6 +505,20 @@ public class UserScreen extends Composite {
             }
         };
 
+        timeSlotColumn.setSortable(true);
+        sortHandler.setComparator(timeSlotColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? String.valueOf(o1.getTimeslot()).compareTo(String.valueOf(o2.getTimeslot())) : 1;
+                }
+                return -1;
+            }
+        });
+
         Column<Student, String> lecturerFirstNameColumn = new Column<Student, String>(new EditTextCell()) {
             @Override
             public String getValue(Student student) {

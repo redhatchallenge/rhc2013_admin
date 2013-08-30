@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.redhatchallenge.rhc2013.shared.FieldVerifier;
 
 /**
  * @author: Terry Chia (terrycwk1994@gmail.com)
@@ -46,6 +47,15 @@ public class RegisterScreen extends Composite {
     @UiField Button generatePasswordButton;
     @UiField Button backButton;
     @UiField Label messageLabel;
+
+    //Validation Error Labels
+    @UiField Label emailLabel;
+    @UiField Label passwordLabel;
+    @UiField Label confirmPasswordLabel;
+    @UiField Label firstNameLabel;
+    @UiField Label lastNameLabel;
+    @UiField Label contactLabel;
+    @UiField Label schoolLabel;
 
     private UserServiceAsync userService = null;
 
@@ -109,7 +119,77 @@ public class RegisterScreen extends Composite {
 
     @UiHandler("registerButton")
     public void handleRegisterButtonClick(ClickEvent event) {
-        registerStudent();
+        int successCounter = 0;
+
+        if(FieldVerifier.emailIsNull(emailField.getText())){
+            emailLabel.setText("Email field cannot be empty.");
+        }
+        else if(!FieldVerifier.isValidEmail(emailField.getText())){
+            emailLabel.setText("You have entered an invalid email format.");
+        }
+        else{
+            emailLabel.setText("");
+            successCounter++;
+        }
+
+        if(FieldVerifier.passwordIsNull(passwordField.getText())){
+            passwordLabel.setText("Password field cannot be empty.");
+        }
+
+        else{
+            passwordLabel.setText("");
+            successCounter++;
+        }
+
+        if(FieldVerifier.passwordIsNull(confirmPasswordField.getText())){
+            confirmPasswordLabel.setText("Confirm password field cannot be empty.");
+        }
+        else if(!confirmPasswordField.getText().equals(passwordField.getText())){
+            confirmPasswordLabel.setText("Password does not match.");
+        }
+        else{
+            confirmPasswordLabel.setText("");
+            successCounter++;
+        }
+
+        if(FieldVerifier.fnIsNull(firstNameField.getText())){
+            firstNameLabel.setText("First Name field cannot be empty.");
+        }
+        else{
+            firstNameLabel.setText("");
+            successCounter++;
+        }
+
+        if(FieldVerifier.lnIsNull(lastNameField.getText())){
+            lastNameLabel.setText("Last name cannot be empty.");
+        }
+        else{
+            lastNameLabel.setText("");
+            successCounter++;
+        }
+
+        if(FieldVerifier.contactIsNull(contactField.getText())){
+            contactLabel.setText("Contact field cannot be empty.");
+        }
+        else if(!FieldVerifier.isValidContact(contactField.getText())){
+            contactLabel.setText("You have entered an invalid contact number.");
+        }
+        else{
+            contactLabel.setText("");
+            successCounter++;
+        }
+
+        if(FieldVerifier.schoolIsNull(schoolField.getText())){
+            schoolLabel.setText("School field cannot be empty.");
+        }
+        else{
+            schoolLabel.setText("");
+            successCounter++;
+        }
+
+        if(successCounter == 7){
+            registerStudent();
+        }
     }
 
     @UiHandler("backButton")

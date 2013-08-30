@@ -59,6 +59,8 @@ public class TimeslotScreen extends Composite {
     @UiField Button noTimeSearchButton;
     @UiField Label timeslotLabel;
     @UiField ListBox timeSlotList;
+    @UiField Button timeslotPageRefresh;
+
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> origStudentList;
@@ -671,25 +673,30 @@ public class TimeslotScreen extends Composite {
             @Override
             public void onSuccess(List<Student> studentList) {
 
-                int counter=0;
-                for(Student s : studentList){
+                int counter = 0;
+                for (Student s : studentList) {
 
-                    if(s.getTimeslot() != 0){
+                    if (s.getTimeslot() != 0) {
 
                         Date date = new Date(s.getTimeslot());
                         String formatedDate = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(date);
 
-                        if(formatedDate.equals(timeslot1)){
+                        if (formatedDate.equals(timeslot1)) {
                             counter++;
                         }
 
                     }
                 }
                 int availableSlot = 300 - counter;
-                check =  String.valueOf(availableSlot);
-                timeslotLabel.setText("Number of slots available for "+ timeslot1 + ": " + availableSlot);
+                check = String.valueOf(availableSlot);
+                timeslotLabel.setText("Number of slots available for " + timeslot1 + ": " + availableSlot);
 
             }
         });
+    }
+
+    @UiHandler("timeslotPageRefresh")
+    public void clickRefreshButton(ClickEvent event){
+        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
     }
 }

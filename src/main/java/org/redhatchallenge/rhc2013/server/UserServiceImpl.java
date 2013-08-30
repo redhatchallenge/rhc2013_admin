@@ -235,7 +235,9 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
                 session.save(student);
                 session.getTransaction().commit();
 
+                assignTimeslotAndQuestions(email);
                 return true;
+
             } catch (ConstraintViolationException e) {
                 session.getTransaction().rollback();
                 return false;
@@ -243,6 +245,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
                 session.getTransaction().rollback();
                 return false;
             }
+
         }
         else {
             class SendConfirmationEmail implements Runnable {

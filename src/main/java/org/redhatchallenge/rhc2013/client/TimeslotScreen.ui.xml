@@ -6,7 +6,7 @@
              xmlns:z="urn:import:org.redhatchallenge.rhc2013.client">
     <g:HTMLPanel>
         <h1>Timeslot Management</h1>
-
+        <center><g:Label ui:field="errorLabel"/></center>
             <center><g:Label ui:field="timeslotLabel"/></center>
                 <tr>
                     <td>Country:</td>

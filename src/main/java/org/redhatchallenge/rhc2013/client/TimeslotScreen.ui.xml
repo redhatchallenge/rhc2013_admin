@@ -38,7 +38,8 @@
                         </g:ListBox>
                         &emsp;
                         Timeslots:
-                        <g:ListBox ui:field="timeSlotList" />
+                        <g:ListBox ui:field="timeSlotList" visibleItemCount="1"/>
+
                         <g:Button ui:field="timeSlotButton" text="Assign Time Slot"/>
                         &emsp;
                         <g:Button ui:field="noTimeSearchButton" text="Contestants Without Timeslot"/>
@@ -48,7 +49,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <br><FONT COLOR="red"><g:Label ui:field="errorLabel"/></FONT></br>
+                        <br><g:Label ui:field="errorLabel"/></br>
                     </td>
                 </tr>
                 <tr><td>&nbsp;</td></tr>

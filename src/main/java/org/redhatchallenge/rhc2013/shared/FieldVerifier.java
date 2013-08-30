@@ -1,12 +1,6 @@
 package org.redhatchallenge.rhc2013.shared;
 
-/**
- * Created with IntelliJ IDEA.
- * User: winnie
- * Date: 8/30/13
- * Time: 1:51 PM
- * To change this template use File | Settings | File Templates.
- */
+
 public class FieldVerifier {
 
     public static boolean isValidEmail(String email) {

@@ -104,6 +104,9 @@ public class TimeslotScreen extends Composite {
 
         pager.setDisplay(timeslotCellTable);
         pager.setPageSize(8);
+        timeSlotList.addItem("Please Select a Time Slot");
+        errorLabel.setVisible(false);
+        errorLabel.setText("No Time Slot Selected! Please try again!");
     }
 
     private void initTimeslotCellTable(){
@@ -286,7 +289,7 @@ public class TimeslotScreen extends Composite {
 
             timeSlotList.clear();
             timeSlotList.insertItem("Please Select a Time Slot",0);
-            timeSlotList.insertItem("23 October 2013, 9am to 10am", 1);
+            timeSlotList.insertItem("23 October 2013, 9:00am to 10:00am", 1);
             timeSlotList.insertItem("23 October 2013, 10:15AM to 11:15AM",2);
             timeSlotList.insertItem("23 October 2013, 11:30AM to 12:30PM",3);
             timeSlotList.insertItem("23 October 2013, 12:45PM to 13:45pm",4);
@@ -309,80 +312,76 @@ public class TimeslotScreen extends Composite {
     }
     @UiHandler("timeSlotList")
     public void handleTimeslotChange(ChangeEvent event){
-        String timeslot1 = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
         String timeslot;
+        switch (timeSlotList.getSelectedIndex()) {
+            case 0:
+                errorLabel.setText("No Time Slot Selected! Please try again!");
+                break;
+            case 1:
+                if (countryField.getItemText(countryField.getSelectedIndex()).contains("China")){
+                    timeslot = "2013-10-23 09:00";
+                    countTimeslot(timeslot);
+                    errorLabel.setVisible(false);
+                }
+                else {
+                    timeslot ="2013-10-24 14:00";
+                    countTimeslot(timeslot);
+                    errorLabel.setVisible(false);
+                }
+                break;
 
-        if (timeslot1.equals("Please Select a Time Slot")){
-            errorLabel.setText("No Time Slot Selected! Please try again!");
-
-        }
-        else if (timeslot1.equals("23 October 2013, 9am to 10am")){
-            timeslot = "2013-10-23 09:00";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-        else if (timeslot1.equals("23 October 2013, 10:15AM to 11:15AM")){
-            timeslot = "2013-10-23 10:15";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-
-        else if (timeslot1.equals("23 October 2013, 11:30AM to 12:30PM")) {
-            timeslot = "2013-10-23 11:30";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-
-        }
-        else if (timeslot1.equals("23 October 2013, 12:45PM to 13:45pm")) {
-            timeslot = "2013-10-23 12:45";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-
-        else if (timeslot1.equals("23 October 2013, 14:00PM to 15:00PM")) {
-            timeslot = "2013-10-23 14:00";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-
-        else if (timeslot1.equals("23 October 2013, 15:15PM to 16:15PM")){
-            timeslot = "2013-10-23 15:15";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-
-        else if (timeslot1.equals("23 October 2013, 16:30PM to 17:30PM")) {
-            timeslot = "2013-10-23 16:30";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-        else if (timeslot1.equals("23 October 2013, 17:45PM to 18:45PM")) {
-            timeslot = "2013-10-23 17:45";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-
-        else if (timeslot1.equals("23 October 2013, 19:00PM to 20:00PM")){
-            timeslot = "2013-10-23 19:00";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-
-        else if (timeslot1.equals("23 October 2013, 20:15PM to 21.15PM")){
-            timeslot = "2013-10-23 20:15";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-
-        else if (timeslot1.equals("24 October 2013, 14:00PM to 15.00PM")){
-            timeslot ="2013-10-24 14:00";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
-        }
-        else{
-            timeslot ="2013-10-24 16:00";
-            countTimeslot(timeslot);
-            errorLabel.setText("");
+            case 2:
+                if (countryField.getItemText(countryField.getSelectedIndex()).contains("China")){
+                    timeslot = "2013-10-23 10:15";
+                    countTimeslot(timeslot);
+                    errorLabel.setVisible(false);
+                }
+                else {
+                    timeslot ="2013-10-24 16:00";
+                    countTimeslot(timeslot);
+                    errorLabel.setVisible(false);
+                }
+                break;
+            case 3:
+                timeslot = "2013-10-23 11:30";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 4:
+                timeslot = "2013-10-23 12:45";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 5:
+                timeslot = "2013-10-23 14:00";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 6:
+                timeslot = "2013-10-23 15:15";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 7:
+                timeslot = "2013-10-23 16:30";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 8:
+                timeslot = "2013-10-23 17:45";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 9:
+                timeslot = "2013-10-23 19:00";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 10:
+                timeslot = "2013-10-23 20:15";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
         }
     }
 
@@ -398,7 +397,7 @@ public class TimeslotScreen extends Composite {
                 }
                 break;
 
-            // Singapore
+            // Singapore                      s
             case 1:
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
@@ -501,7 +500,7 @@ public class TimeslotScreen extends Composite {
             }
         }
         else{
-            errorLabel.setText("No Time Slot Selected! Please try again!");
+            errorLabel.setVisible(true);
         }
     }
 
@@ -619,7 +618,6 @@ public class TimeslotScreen extends Composite {
             public void onSuccess(List<Student> studentList) {
 
                 int counter = 0;
-//            String region = regionField.getItemText(regionField.getSelectedIndex());
                 for(Student s : studentList) {
                     if(s.getCountry().substring(6).equals(region1)){
                         if(s.getTimeslot() == 0){
@@ -695,7 +693,7 @@ public class TimeslotScreen extends Composite {
                     if(s.getTimeslot() != 0){
 
                         Date date = new Date(s.getTimeslot());
-                        String formatedDate = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(date);
+                        final String formatedDate = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(date);
 
                         if(formatedDate.equals(timeslot1)){
                             counter++;
@@ -709,5 +707,10 @@ public class TimeslotScreen extends Composite {
 
             }
         });
+    }
+
+    @UiHandler("timeslotPageRefresh")
+    public void refreshButton(ClickEvent event){
+        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
     }
 }

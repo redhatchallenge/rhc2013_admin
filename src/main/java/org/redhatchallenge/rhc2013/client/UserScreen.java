@@ -62,6 +62,7 @@ public class UserScreen extends Composite {
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
+    private List<Student> origStudentList;
     private ListDataProvider<Student> provider;
     private List<Student> listOfSelectedStudents = new ArrayList<Student>();
     private static final ProvidesKey<Student> KEY_PROVIDER = new ProvidesKey<Student>() {
@@ -85,7 +86,6 @@ public class UserScreen extends Composite {
             public void onSuccess(List<Student> result) {
 
                 studentList = result;
-
                 setUserCount();
 
                 provider = new ListDataProvider<Student>(studentList);
@@ -307,12 +307,11 @@ public class UserScreen extends Composite {
             countryList.add("Singapore");
             countryList.add("Malaysia");
             countryList.add("Thailand");
-            countryList.add("China/Region 1");
-            countryList.add("China/Region 2");
-            countryList.add("China/Region 3");
-            countryList.add("China/Region 4");
-            countryList.add("China/Region 5");
-            countryList.add("China/Region 6");
+            countryList.add("China/Beijing");
+            countryList.add("China/Shanghai");
+            countryList.add("China/Wuhan");
+            countryList.add("China/Dalian");
+            countryList.add("China/Jinan");
             countryList.add("China/Others");
             countryList.add("Hong Kong");
             countryList.add("Taiwan");
@@ -504,6 +503,20 @@ public class UserScreen extends Composite {
                 }
             }
         };
+
+        timeSlotColumn.setSortable(true);
+        sortHandler.setComparator(timeSlotColumn, new Comparator<Student>() {
+            @Override
+            public int compare(Student o1, Student o2) {
+                if (o1 == o2) {
+                    return 0;
+                }
+                if (o1 != null) {
+                    return (o2 != null) ? String.valueOf(o1.getTimeslot()).compareTo(String.valueOf(o2.getTimeslot())) : 1;
+                }
+                return -1;
+            }
+        });
 
         Column<Student, String> lecturerFirstNameColumn = new Column<Student, String>(new EditTextCell()) {
             @Override
@@ -769,7 +782,7 @@ public class UserScreen extends Composite {
         cellTable.addColumn(emailColumn, "Email");
         cellTable.addColumn(firstNameColumn, "First Name");
         cellTable.addColumn(lastNameColumn, "Last Name");
-        cellTable.addColumn(countryColumn, "Country");
+        cellTable.addColumn(countryColumn, "Region");
         cellTable.addColumn(countryCodeColumn, "Country Code");
         cellTable.addColumn(contactColumn, "Contact");
         cellTable.addColumn(schoolColumn, "School");
@@ -883,7 +896,8 @@ public class UserScreen extends Composite {
                 }
             }
 
-            provider.setList(list);
+            provider.getList().clear();
+            provider.getList().addAll(list);
         }
     }
 

@@ -56,9 +56,10 @@ public class UserScreen extends Composite {
     @UiField MySimplePager pager;
     @UiField Label registrationLabel;
     @UiField Label verifiedLabel;
-    @UiField Label testing;
     @UiField ListBox timeSlotList;
     @UiField Button timeSlotButton;
+    @UiField Button TimeSlotMngButton;
+
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> studentList;
@@ -112,7 +113,6 @@ public class UserScreen extends Composite {
         Column<Student, Boolean> selectColumn = new Column<Student, Boolean>(new CheckboxCell(true, false)) {
             @Override
             public Boolean getValue(Student student) {
-                testing.setText(listOfSelectedStudents + "");
                 return selectionModel.isSelected(student);
 
             }
@@ -123,7 +123,6 @@ public class UserScreen extends Composite {
             public void update(int index, Student student, Boolean value) {
                 if(value) {
                     listOfSelectedStudents.add(student);
-                    testing.setText(listOfSelectedStudents + "");
                 }
 
                 else {
@@ -156,13 +155,11 @@ public class UserScreen extends Composite {
                         if (!listOfSelectedStudents.contains(cellTable.getVisibleItem(i)))
                             listOfSelectedStudents.add(cellTable.getVisibleItem(i));
                     }
-                    testing.setText(listOfSelectedStudents.toString());
                 }
                 else if (aBoolean == false){
                     for (int i=0;i<cellTable.getVisibleItemCount(); i++){
                         listOfSelectedStudents.remove(cellTable.getVisibleItem(i));
                     }
-                testing.setText(listOfSelectedStudents.toString());
                 }
             }
         });//End of checkbox
@@ -349,11 +346,9 @@ public class UserScreen extends Composite {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if(!result) {
+                        if (!result) {
                             displayErrorBox("Failed", "Update has failed");
-                        }
-
-                        else {
+                        } else {
                             cellTable.redraw();
                         }
                     }
@@ -433,11 +428,9 @@ public class UserScreen extends Composite {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if(!result) {
+                        if (!result) {
                             displayErrorBox("Failed", "Update has failed");
-                        }
-
-                        else {
+                        } else {
                             cellTable.redraw();
                         }
                     }
@@ -479,11 +472,9 @@ public class UserScreen extends Composite {
 
                     @Override
                     public void onSuccess(Boolean result) {
-                        if(!result) {
+                        if (!result) {
                             displayErrorBox("Failed", "Update has failed");
-                        }
-
-                        else {
+                        } else {
                             cellTable.redraw();
                         }
                     }
@@ -740,6 +731,7 @@ public class UserScreen extends Composite {
                                     setUserCount();
                                 }
                             });
+
                         }
                     }
                 });
@@ -951,7 +943,6 @@ public class UserScreen extends Composite {
                     studentList.removeAll(toBeRemoved);
                     provider.setList(studentList);
                     listOfSelectedStudents.clear(); //remove list of selected & deleted users
-                    testing.setText(listOfSelectedStudents.toString());
                     setUserCount();
                 }
             }
@@ -962,6 +953,11 @@ public class UserScreen extends Composite {
     @UiHandler("registerButton")
     public void handleRegisterButtonClick(ClickEvent event) {
         ContentContainer.INSTANCE.setContent(new RegisterScreen());
+    }
+
+    @UiHandler("TimeSlotMngButton")
+    public void handleTimeSlotMngButtonClick(ClickEvent event) {
+        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
     }
 
     @UiHandler("exportButton")

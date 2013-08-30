@@ -7,6 +7,7 @@
     <g:HTMLPanel>
         <h1>Timeslot Management</h1>
 
+            <center><g:Label ui:field="timeslotLabel"/></center>
                 <tr>
                     <td>Country:</td>
                     <td>
@@ -30,9 +31,14 @@
                             <g:item value="6">Jinan</g:item>
                             <g:item value="7">Others</g:item>
                         </g:ListBox><br/>
+                        <g:ListBox ui:field="timeSlotList" />
+                        <g:Button ui:field="timeSlotButton" text="Assign Time Slot"/>
                     </td>
                     <td>
                         <g:Button ui:field="noTimeSearchButton" text="Without Timeslot"/>
+                    </td>
+                    <td>
+                        <g:Button ui:field="backButton" text="Back"/>
                     </td>
                 </tr>
                 <!--<tr>-->
@@ -51,6 +57,10 @@
                 <!--</g:ListBox><br/>-->
                 <!--</td>-->
                 <!--</tr>-->
+                <tr>
+                    <td>&nbsp;</td>
+                    <td><g:Label ui:field="noTimeslotLabel"/></td>
+                </tr>
                 <tr>
                     <td>&nbsp;</td>
                     <td><g:Label ui:field="noTimeslot"/></td>

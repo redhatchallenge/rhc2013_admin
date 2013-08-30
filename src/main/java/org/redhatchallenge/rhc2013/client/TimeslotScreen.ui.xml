@@ -38,6 +38,9 @@
                         <g:Button ui:field="noTimeSearchButton" text="Without Timeslot"/>
                     </td>
                     <td>
+                        <g:Button ui:field="timeslotPageRefresh" text="Refresh"/>
+                    </td>
+                    <td>
                         <g:Button ui:field="backButton" text="Back"/>
                     </td>
                 </tr>

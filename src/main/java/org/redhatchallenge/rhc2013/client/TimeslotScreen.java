@@ -11,7 +11,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -25,7 +24,6 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
@@ -61,6 +59,8 @@ public class TimeslotScreen extends Composite {
     @UiField Button noTimeSearchButton;
     @UiField Label timeslotLabel;
     @UiField ListBox timeSlotList;
+    @UiField Button timeslotPageRefresh;
+
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> origStudentList;
@@ -673,25 +673,30 @@ public class TimeslotScreen extends Composite {
             @Override
             public void onSuccess(List<Student> studentList) {
 
-                int counter=0;
-                for(Student s : studentList){
+                int counter = 0;
+                for (Student s : studentList) {
 
-                    if(s.getTimeslot() != 0){
+                    if (s.getTimeslot() != 0) {
 
                         Date date = new Date(s.getTimeslot());
                         String formatedDate = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(date);
 
-                        if(formatedDate.equals(timeslot1)){
+                        if (formatedDate.equals(timeslot1)) {
                             counter++;
                         }
 
                     }
                 }
                 int availableSlot = 300 - counter;
-                check =  String.valueOf(availableSlot);
-                timeslotLabel.setText("Number of slots available for "+ timeslot1 + ": " + availableSlot);
+                check = String.valueOf(availableSlot);
+                timeslotLabel.setText("Number of slots available for " + timeslot1 + ": " + availableSlot);
 
             }
         });
+    }
+
+    @UiHandler("timeslotPageRefresh")
+    public void clickRefreshButton(ClickEvent event){
+        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
     }
 }

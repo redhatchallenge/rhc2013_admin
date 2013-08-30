@@ -61,7 +61,9 @@ public class TimeslotScreen extends Composite {
     @UiField Button noTimeSearchButton;
     @UiField Label timeslotLabel;
     @UiField ListBox timeSlotList;
+    @UiField Button timeslotPageRefresh;
     @UiField Label errorLabel;
+
 
     private UserServiceAsync userService = UserService.Util.getInstance();
     private List<Student> origStudentList;
@@ -287,7 +289,7 @@ public class TimeslotScreen extends Composite {
 
             timeSlotList.clear();
             timeSlotList.insertItem("Please Select a Time Slot",0);
-            timeSlotList.insertItem("23 October 2013, 9:00am to 10:00am", 1);
+            timeSlotList.insertItem("23 October 2013, 9am to 10am", 1);
             timeSlotList.insertItem("23 October 2013, 10:15AM to 11:15AM",2);
             timeSlotList.insertItem("23 October 2013, 11:30AM to 12:30PM",3);
             timeSlotList.insertItem("23 October 2013, 12:45PM to 13:45pm",4);
@@ -314,76 +316,64 @@ public class TimeslotScreen extends Composite {
         String timeslot;
 
         if (timeslot1.equals("Please Select a Time Slot")){
-            errorLabel.setText("No TimeSlot Selected");
+            timeslotLabel.setText("");
 
         }
         else if (timeslot1.equals("23 October 2013, 9am to 10am")){
             timeslot = "2013-10-23 09:00";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
         else if (timeslot1.equals("23 October 2013, 10:15AM to 11:15AM")){
             timeslot = "2013-10-23 10:15";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
 
         else if (timeslot1.equals("23 October 2013, 11:30AM to 12:30PM")) {
             timeslot = "2013-10-23 11:30";
             countTimeslot(timeslot);
-            errorLabel.setText("");
 
         }
         else if (timeslot1.equals("23 October 2013, 12:45PM to 13:45pm")) {
             timeslot = "2013-10-23 12:45";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
 
         else if (timeslot1.equals("23 October 2013, 14:00PM to 15:00PM")) {
             timeslot = "2013-10-23 14:00";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
 
         else if (timeslot1.equals("23 October 2013, 15:15PM to 16:15PM")){
             timeslot = "2013-10-23 15:15";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
 
         else if (timeslot1.equals("23 October 2013, 16:30PM to 17:30PM")) {
             timeslot = "2013-10-23 16:30";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
         else if (timeslot1.equals("23 October 2013, 17:45PM to 18:45PM")) {
             timeslot = "2013-10-23 17:45";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
 
         else if (timeslot1.equals("23 October 2013, 19:00PM to 20:00PM")){
             timeslot = "2013-10-23 19:00";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
 
         else if (timeslot1.equals("23 October 2013, 20:15PM to 21.15PM")){
             timeslot = "2013-10-23 20:15";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
 
         else if (timeslot1.equals("24 October 2013, 14:00PM to 15.00PM")){
             timeslot ="2013-10-24 14:00";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
         else{
             timeslot ="2013-10-24 16:00";
             countTimeslot(timeslot);
-            errorLabel.setText("");
         }
     }
 
@@ -472,37 +462,33 @@ public class TimeslotScreen extends Composite {
 
     @UiHandler("timeSlotButton")
     public void handleTimeSlotButtonClick(ClickEvent event) {
-        final String timeSlot;
-        if(!timeSlotList.getItemText(timeSlotList.getSelectedIndex()).equals("Please Select a Time Slot")){
-            timeSlot = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
-            if(!check.equals("0")){
-                userService.assignTimeSlot(selectedStudentList, timeSlot, new AsyncCallback<Boolean>() {
-                    @Override
-                    public void onFailure(Throwable caught) {
-                        caught.printStackTrace();
+        final String timeSlot = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
+        if(!check.equals("0")){
+            userService.assignTimeSlot(selectedStudentList, timeSlot, new AsyncCallback<Boolean>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    caught.printStackTrace();
+                }
+
+                @Override
+                public void onSuccess(Boolean result) {
+                    if(!result) {
+                        displayErrorBox("Error", "Unable to Assign Time Slot");
                     }
 
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        if(!result) {
-                            displayErrorBox("Error", "Unable to Assign Time Slot");
-                        }
-
-                        else {
-                            ContentContainer.INSTANCE.setContent(new TimeslotScreen());
-                        }
+                    else {
+                        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
                     }
-                });
+                }
+            });
 
-                timeslotCellTable.redraw();
+            timeslotCellTable.redraw();
 
-            }
-            else{
-                timeslotLabel.setText("The time slot is full, please try another time slot");
-            }
         }
+
         else{
-            errorLabel.setText("No Time Slot Selected");
+            timeslotLabel.setText("The time slot is full, please try another time slot");
+
         }
     }
 

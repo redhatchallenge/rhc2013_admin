@@ -109,7 +109,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
         DateTime time;
         Long unixTime;
 
-        if(timeSlot.equalsIgnoreCase("23 October 2013, 9am to 10am")){
+        if(timeSlot.equalsIgnoreCase("23 October 2013, 9:00am to 10:00am")){
             time = new DateTime(2013, 10, 23, 1, 0);
             unixTime = time.toInstant().getMillis();
             return unixTime;

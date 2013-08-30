@@ -1,34 +1,55 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
-        <h1>User Creation</h1>
-       <center>
-           <table width="275">
+        <center>
+            <table  style="width: 563px">
+                &nbsp;
+                <p>
+                    <p><font size="6"><b>User Creation</b></font></p>
+                </p>
+                &nbsp;
                <tr>
                    <td>Email Address:</td>
                    <td><g:TextBox ui:field="emailField"/></td>
                </tr>
                <tr>
-                   <td>Password:</td>
-                   <td><g:TextBox ui:field="passwordField"/></td>
-                   <td><g:Button ui:field="generatePasswordButton" text="Generate Password"/></td>
+                   <td width="174">&nbsp;</td>
+                   <td><FONT COLOR="red"><g:Label ui:field="emailLabel"/></FONT></td>
                </tr>
-
+               <tr>
+                   <td>Password:</td>
+                   <td><g:TextBox ui:field="passwordField"/>
+                   <g:Button ui:field="generatePasswordButton" text="Generate Password"/></td>
+               </tr>
+               <tr>
+                   <td width="174">&nbsp;</td>
+                   <td><FONT COLOR="red"><g:Label ui:field="passwordLabel"/></FONT></td>
+               </tr>
                <tr>
                    <td> Confirm Password: </td>
                    <td><g:TextBox ui:field="confirmPasswordField"/></td>
+               </tr>
+               <tr>
+                   <td width="174">&nbsp;</td>
+                   <td><FONT COLOR="red"><g:Label ui:field="confirmPasswordLabel"/></FONT></td>
                </tr>
                <tr>
                    <td>First Name:</td>
                    <td><g:TextBox ui:field="firstNameField"/></td>
                </tr>
                <tr>
+                   <td width="174">&nbsp;</td>
+                   <td><FONT COLOR="red"><g:Label ui:field="firstNameLabel"/></FONT></td>
+               </tr>
+               <tr>
                    <td>Last Name:</td>
                    <td><g:TextBox ui:field="lastNameField"/></td>
                </tr>
                <tr>
-                   <td>Contact:</td>
-                   <td><g:TextBox ui:field="contactField"/></td>
+                   <td width="174">&nbsp;</td>
+                   <td><FONT COLOR="red"><g:Label ui:field="lastNameLabel"/></FONT></td>
                </tr>
                <tr>
                    <td>Country:</td>
@@ -53,8 +74,9 @@
                        </g:ListBox><br/>
                    </td>
                </tr>
+               <tr><td width="174">&nbsp;</td></tr>
                <tr>
-                   <td>Country Code:</td>
+                   <td>Contact:</td>
                    <td>
                        <g:ListBox ui:field="countryCodeField" visibleItemCount="1">
                            <g:item value="1">65</g:item>
@@ -64,24 +86,35 @@
                            <g:item value="5">852</g:item>
                            <g:item value="6">886</g:item>
                        </g:ListBox>
+                       <g:TextBox ui:field="contactField"/>
                    </td>
+               </tr>
+               <tr><td width="174">&nbsp;</td>
+                   <td><FONT COLOR="red"><g:Label ui:field="contactLabel"/></FONT></td>
                </tr>
                <tr>
                    <td>School:</td>
                    <td><g:TextBox ui:field="schoolField"/></td>
                </tr>
                <tr>
+                   <td width="174">&nbsp;</td>
+                   <td><FONT COLOR="red"><g:Label ui:field="schoolLabel"/></FONT></td>
+               </tr>
+               <tr>
                    <td>Lecturer's First Name: </td>
                    <td><g:TextBox ui:field="lecturerFirstNameField"/></td>
                </tr>
+               <tr><td width="174">&nbsp;</td></tr>
                <tr>
                    <td>Lecturer's Last Name: </td>
                    <td><g:TextBox ui:field="lecturerLastNameField"/></td>
                </tr>
+               <tr><td width="174">&nbsp;</td></tr>
                <tr>
                    <td>Lecturer's Email: </td>
                    <td><g:TextBox ui:field="lecturerEmailField"/></td>
                </tr>
+               <tr><td width="174">&nbsp;</td></tr>
                <tr>
                    <td>Language:</td>
                    <td>
@@ -92,12 +125,14 @@
                        </g:ListBox>
                    </td>
                </tr>
+               <tr><td width="174">&nbsp;</td></tr>
                <tr>
-                   <td>Set Verified </td>
+                   <td>Set Verified: </td>
                    <td><g:CheckBox ui:field="verifiedField" /></td>
                </tr>
+               <tr><td width="174">&nbsp;</td></tr>
                <tr>
-                   <td> <g:Button ui:field="registerButton" text="Create"/></td>
+                   <td align="right"> <g:Button ui:field="registerButton" text="Create"/></td>
                    <td><g:Button ui:field="backButton" text="Back"/></td>
                </tr>
                <tr>

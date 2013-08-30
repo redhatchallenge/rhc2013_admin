@@ -13,6 +13,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.redhatchallenge.rhc2013.client.UserService;
+import org.redhatchallenge.rhc2013.shared.ConfirmationTokens;
 import org.redhatchallenge.rhc2013.shared.Student;
 
 import java.io.ByteArrayOutputStream;
@@ -20,6 +21,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -206,6 +210,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
         lecturerEmail = SecurityUtil.escapeInput(lecturerEmail);
         language = SecurityUtil.escapeInput(language);
 
+
         password = SecurityUtil.hashPassword(password);
 
         Student student = new Student();
@@ -223,19 +228,93 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
         student.setLanguage(language);
         student.setVerified(verified);
 
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        try {
-            session.beginTransaction();
-            session.save(student);
-            session.getTransaction().commit();
+        if (verified == true){
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            try {
+                session.beginTransaction();
+                session.save(student);
+                session.getTransaction().commit();
 
-            return true;
-        } catch (ConstraintViolationException e) {
-            session.getTransaction().rollback();
-            return false;
-        } catch (HibernateException e) {
-            session.getTransaction().rollback();
-            return false;
+                return true;
+            } catch (ConstraintViolationException e) {
+                session.getTransaction().rollback();
+                return false;
+            } catch (HibernateException e) {
+                session.getTransaction().rollback();
+                return false;
+            }
+        }
+        else {
+            class SendConfirmationEmail implements Runnable {
+                String email;
+
+                SendConfirmationEmail(String email) {
+                    this.email = email;
+                }
+                @Override
+                public void run() {
+
+                    ConfirmationTokens token = new ConfirmationTokens();
+                    token.setToken(EmailUtil.generateToken(32));
+                    token.setEmail(email);
+
+                    String html = null;
+
+
+                    Session currentSession = HibernateUtil.getSessionFactory().getCurrentSession();
+                    currentSession.beginTransaction();
+
+                    Criteria criteria = currentSession.createCriteria(Student.class);
+                    criteria.add(Restrictions.eq("email", email));
+                    Student student = (Student)criteria.uniqueResult();
+
+                    try {
+                        if(student.getLanguage().equalsIgnoreCase("English")) {
+                            String path = getServletContext().getRealPath("emails/confirm_en.html");
+                            html = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+                            html = html.replaceAll("REPLACEME", "https://redhatchallenge2013-rhc2013.rhcloud.com/?locale=en#confirmToken/" + token.getToken());
+                        }
+
+                        else if(student.getLanguage().equalsIgnoreCase("Chinese (Simplified)")) {
+                            String path = getServletContext().getRealPath("emails/confirm_ch.html");
+                            html = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+                            html = html.replaceAll("REPLACEME", "https://redhatchallenge2013-rhc2013.rhcloud.com/?locale=ch#confirmToken/" + token.getToken());
+                        }
+
+                        else if(student.getLanguage().equals("Chinese (Traditional)")) {
+                            String path = getServletContext().getRealPath("emails/confirm_zh.html");
+                            html = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+                            html = html.replaceAll("REPLACEME", "https://redhatchallenge2013-rhc2013.rhcloud.com/?locale=zh#confirmToken/" + token.getToken());
+                        }
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    EmailUtil.sendEmail("Confirmation of account", html, "Your client does not support HTML messages, your token is " + token.getToken(),
+                            email);
+
+                    currentSession.save(token);
+                    currentSession.getTransaction().commit();
+                }
+            }
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            try {
+                session.beginTransaction();
+                session.save(student);
+                session.getTransaction().commit();
+
+                Thread t = new Thread(new SendConfirmationEmail(email));
+                t.start();
+
+                return true;
+            } catch (ConstraintViolationException e) {
+                session.getTransaction().rollback();
+                return false;
+            } catch (HibernateException e) {
+                session.getTransaction().rollback();
+                return false;
+            }
         }
     }
 

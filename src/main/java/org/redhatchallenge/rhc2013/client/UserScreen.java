@@ -3,6 +3,7 @@ package org.redhatchallenge.rhc2013.client;
 import com.google.gwt.cell.client.*;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -59,6 +60,7 @@ public class UserScreen extends Composite {
     @UiField ListBox timeSlotList;
     @UiField Button timeSlotButton;
     @UiField Button TimeSlotMngButton;
+    @UiField Label errorLabel;
 
 
     private UserServiceAsync userService = UserService.Util.getInstance();
@@ -789,6 +791,36 @@ public class UserScreen extends Composite {
         cellTable.setSelectionModel(selectionModel, DefaultSelectionEventManager.<Student> createCheckboxManager(cellTable.getColumnIndex(selectColumn)));
     }
 
+    @UiHandler("timeSlotList")
+    public void handleTimeSlot(ChangeEvent event){
+        switch(timeSlotList.getSelectedIndex()){
+            case 1:
+                errorLabel.setText("");
+            case 2:
+                errorLabel.setText("");
+            case 3:
+                errorLabel.setText("");
+            case 4:
+                errorLabel.setText("");
+            case 5:
+                errorLabel.setText("");
+            case 6:
+                errorLabel.setText("");
+            case 7:
+                errorLabel.setText("");
+            case 8:
+                errorLabel.setText("");
+            case 9:
+                errorLabel.setText("");
+            case 10:
+                errorLabel.setText("");
+            case 11:
+                errorLabel.setText("");
+            case 12:
+                errorLabel.setText("");
+        }
+    }
+
     @UiHandler("searchButton")
     public void handleSearchButtonClick(ClickEvent event) {
         String contains = searchField.getText();
@@ -895,28 +927,37 @@ public class UserScreen extends Composite {
 
     @UiHandler("timeSlotButton")
     public void handleTimeSlotButtonClick(ClickEvent event) {
-        final String timeSlot = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
-
-        userService.assignTimeSlot(listOfSelectedStudents, timeSlot, new AsyncCallback<Boolean>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                caught.printStackTrace();
-            }
-
-            @Override
-            public void onSuccess(Boolean result) {
-                if(!result) {
-                    displayErrorBox("Error", "Unable to Assign Time Slot");
+        final String timeSlot;
+        if(!timeSlotList.getItemText(timeSlotList.getSelectedIndex()).equals("Please Select a Time Slot")){
+            timeSlot = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
+            userService.assignTimeSlot(listOfSelectedStudents, timeSlot, new AsyncCallback<Boolean>() {
+                @Override
+                public void onFailure(Throwable caught) {
+                    caught.printStackTrace();
                 }
 
-                else {
-                    registrationLabel.setText("Thank You");
-                    ContentContainer.INSTANCE.setContent(new UserScreen());
-                }
-            }
-        });
+                @Override
+                public void onSuccess(Boolean result) {
+                    if(!result) {
+                        displayErrorBox("Error", "Unable to Assign Time Slot");
+                    }
 
-        cellTable.redraw();
+                    else {
+                        registrationLabel.setText("Thank You");
+                        ContentContainer.INSTANCE.setContent(new UserScreen());
+                    }
+                }
+            });
+
+            cellTable.redraw();
+        }
+        else{
+            errorLabel.setText("No Time Slot Selected");
+        }
+
+
+
+
     }
 
     @UiHandler("deleteButton")

@@ -13,6 +13,7 @@ import org.hibernate.type.StandardBasicTypes;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.redhatchallenge.rhc2013.client.UserService;
+import org.redhatchallenge.rhc2013.shared.ConfirmationTokens;
 import org.redhatchallenge.rhc2013.shared.Student;
 
 import java.io.ByteArrayOutputStream;
@@ -20,6 +21,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -206,6 +210,7 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
         lecturerEmail = SecurityUtil.escapeInput(lecturerEmail);
         language = SecurityUtil.escapeInput(language);
 
+
         password = SecurityUtil.hashPassword(password);
 
         Student student = new Student();
@@ -223,19 +228,44 @@ public class UserServiceImpl extends RemoteServiceServlet implements UserService
         student.setLanguage(language);
         student.setVerified(verified);
 
-        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-        try {
-            session.beginTransaction();
-            session.save(student);
-            session.getTransaction().commit();
+        if (verified == true){
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            try {
+                session.beginTransaction();
+                session.save(student);
+                session.getTransaction().commit();
 
-            return true;
-        } catch (ConstraintViolationException e) {
-            session.getTransaction().rollback();
-            return false;
-        } catch (HibernateException e) {
-            session.getTransaction().rollback();
-            return false;
+                assignTimeslotAndQuestions(email);
+                return true;
+
+            } catch (ConstraintViolationException e) {
+                session.getTransaction().rollback();
+                return false;
+            } catch (HibernateException e) {
+                session.getTransaction().rollback();
+                return false;
+            }
+
+        }
+        else {
+
+            Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+            try {
+                session.beginTransaction();
+                session.save(student);
+                session.getTransaction().commit();
+
+                Thread t = new Thread(new SendConfirmationEmail(email, getServletContext()));
+                t.start();
+
+                return true;
+            } catch (ConstraintViolationException e) {
+                session.getTransaction().rollback();
+                return false;
+            } catch (HibernateException e) {
+                session.getTransaction().rollback();
+                return false;
+            }
         }
     }
 

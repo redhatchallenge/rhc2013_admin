@@ -5,13 +5,15 @@
              xmlns:c="urn:import:com.google.gwt.user.cellview.client"
              xmlns:z="urn:import:org.redhatchallenge.rhc2013.client">
     <g:HTMLPanel>
-        <h1>Search Page</h1>
-        <center>
-            <g:Label ui:field="registrationLabel"/>
-            <g:Label ui:field="verifiedLabel"/>
-            &nbsp;
-        </center>
         <table>
+            <tr><td>
+                <p><center>
+                    <p><font size="6"><b>Search Page</b></font></p>
+                    <g:Label ui:field="registrationLabel"/>
+                    <g:Label ui:field="verifiedLabel"/>
+                </center></p>
+            </td></tr>
+            <tr><td>&nbsp;</td></tr>
         <tr>
             <td>
             Search:
@@ -30,9 +32,8 @@
                 <g:item value="10">Lecturer's Email</g:item>
                  <g:item value="11">Language</g:item>
              </g:ListBox>
-
-
-            <g:Button ui:field="searchButton" text="Search"/><br/>
+             <g:Button ui:field="searchButton" text="Search"/>
+             &emsp;
              Time Slot:
                 <g:ListBox ui:field="timeSlotList" visibleItemCount="1">
                     <g:item value="1">Please Select a Time Slot</g:item>
@@ -49,19 +50,26 @@
                     <g:item value="11">24 October 2013, 14:00PM to 15.00PM</g:item>
                     <g:item value="12">24 October 2013, 16:00PM to 17:00PM</g:item>
                 </g:ListBox>
-                <g:Button ui:field="timeSlotButton" text="Assign"/><br/>
-                <g:Label ui:field="errorLabel"/>
+                <g:Button ui:field="timeSlotButton" text="Assign"/>
+                &emsp;
+                Other Screens:
+                <g:Button ui:field="registerButton" text="Add New Contestant"/>
+                &emsp;
+                <g:Button ui:field="TimeSlotMngButton" text="Manage Time Slots"/>
             </td>
         </tr>
-        <tr>
-            <td>
-            <g:Button ui:field="deleteButton" text="Delete"/>
-            <g:Button ui:field="registerButton" text="Add"/>
-            <g:Button ui:field="TimeSlotMngButton" text="Time Slot Management"/>
-            <g:Button ui:field="exportButton" text="Export"/>
-            <g:Button ui:field="refreshButton" text="Refresh"/>
-            </td>
-        </tr>
+            <tr>
+               <td>
+                    <g:Button ui:field="deleteButton" text="Delete"/>
+                    <g:Button ui:field="exportButton" text="Export"/>
+                    <g:Button ui:field="refreshButton" text="Refresh"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <br><FONT COLOR="red"><g:Label ui:field="errorLabel"/></FONT></br>
+                </td>
+            </tr>
 
         <c:CellTable ui:field="cellTable"/>
         <z:MySimplePager location="CENTER" fastForwardRows="0" showFastForwardButton="false" showLastPageButton="true"  ui:field="pager"/>

@@ -5,12 +5,19 @@
              xmlns:c="urn:import:com.google.gwt.user.cellview.client"
              xmlns:z="urn:import:org.redhatchallenge.rhc2013.client">
     <g:HTMLPanel>
-        <h1>Timeslot Management</h1>
-        <center><g:Label ui:field="errorLabel"/></center>
-            <center><g:Label ui:field="timeslotLabel"/></center>
-                <tr>
-                    <td>Country:</td>
+        <center><table>
+        <tr><td>
+            <p><center>
+                <p><font size="6"><b>Time Management</b></font></p>
+                <g:Label ui:field="timeslotLabel"/>
+                <g:Label ui:field="noTimeslotLabel"/>
+            </center></p>
+        </td></tr>
+        <tr><td>&nbsp;</td></tr>
+
+            <tr>
                     <td>
+                    Country:
                         <g:ListBox ui:field="countryField" visibleItemCount="1">
                             <g:item value="1">Select All</g:item>
                             <g:item value="2">Singapore</g:item>
@@ -20,8 +27,6 @@
                             <g:item value="6">Hong Kong</g:item>
                             <g:item value="7">Taiwan</g:item>
                         </g:ListBox>
-                    </td>
-                    <td>
                         <g:ListBox ui:field="regionField" visibleItemCount="1" visible="false">
                             <g:item value="1">Select All</g:item>
                             <g:item value="2">Beijing</g:item>
@@ -30,45 +35,26 @@
                             <g:item value="5">Dalian</g:item>
                             <g:item value="6">Jinan</g:item>
                             <g:item value="7">Others</g:item>
-                        </g:ListBox><br/>
-                        <g:ListBox ui:field="timeSlotList" />
+                        </g:ListBox>
+                        &emsp;
+                        Timeslots:
+                        <g:ListBox ui:field="timeSlotList" visibleItemCount="1"/>
+
                         <g:Button ui:field="timeSlotButton" text="Assign Time Slot"/>
-                    </td>
-                    <td>
-                        <g:Button ui:field="noTimeSearchButton" text="Without Timeslot"/>
-                    </td>
-                    <td>
+                        &emsp;
+                        <g:Button ui:field="noTimeSearchButton" text="Contestants Without Timeslot"/>
                         <g:Button ui:field="timeslotPageRefresh" text="Refresh"/>
-                    </td>
-                    <td>
                         <g:Button ui:field="backButton" text="Back"/>
                     </td>
                 </tr>
-                <!--<tr>-->
-                <!--<td>-->
-                <!--<g:ListBox ui:field="timeslotField" visibleItemCount="1">-->
-                <!--<g:item value="1">23 Oct 2013 09:00:00 GMT</g:item>-->
-                <!--<g:item value="2">23 Oct 2013 10:15:00 GMT</g:item>-->
-                <!--<g:item value="3">23 Oct 2013 11:30:00 GMT</g:item>-->
-                <!--<g:item value="4">23 Oct 2013 12:45:00 GMT</g:item>-->
-                <!--<g:item value="5">23 Oct 2013 14:00:00 GMT</g:item>-->
-                <!--<g:item value="6">23 Oct 2013 15:15:00 GMT</g:item>-->
-                <!--<g:item value="7">23 Oct 2013 16:30:00 GMT</g:item>-->
-                <!--<g:item value="8">23 Oct 2013 17:45:00 GMT</g:item>-->
-                <!--<g:item value="9">23 Oct 2013 19:00:00 GMT</g:item>-->
-                <!--<g:item value="10">23 Oct 2013 20:15:00 GMT</g:item>-->
-                <!--</g:ListBox><br/>-->
-                <!--</td>-->
-                <!--</tr>-->
                 <tr>
-                    <td>&nbsp;</td>
-                    <td><g:Label ui:field="noTimeslotLabel"/></td>
+                    <td>
+                        <br><g:Label ui:field="errorLabel"/></br>
+                    </td>
                 </tr>
-                <tr>
-                    <td>&nbsp;</td>
-                    <td><g:Label ui:field="noTimeslot"/></td>
-                </tr>
+                <tr><td>&nbsp;</td></tr>
         <c:CellTable ui:field="timeslotCellTable"/>
         <z:MySimplePager location="CENTER" fastForwardRows="0" showFastForwardButton="false" showLastPageButton="true"  ui:field="pager"/>
+        </table></center>
     </g:HTMLPanel>
 </ui:UiBinder>

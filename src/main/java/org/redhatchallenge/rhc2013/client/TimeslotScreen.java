@@ -1,7 +1,6 @@
 package org.redhatchallenge.rhc2013.client;
 
 import com.google.gwt.cell.client.CheckboxCell;
-import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SelectionCell;
 import com.google.gwt.cell.client.TextCell;
@@ -11,7 +10,6 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -25,7 +23,6 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
@@ -55,7 +52,7 @@ public class TimeslotScreen extends Composite {
     @UiField ListBox countryField;
     @UiField ListBox regionField;
     //    @UiField ListBox timeslotField;
-    @UiField Label noTimeslot;
+    @UiField Label noTimeslotLabel;
     @UiField CellTable<Student> timeslotCellTable;
     @UiField MySimplePager pager;
     @UiField Button noTimeSearchButton;
@@ -71,14 +68,14 @@ public class TimeslotScreen extends Composite {
     private ListDataProvider<Student> provider;
     private List<Student> selectedStudentList = new ArrayList<Student>();
     List<Student> list = new ArrayList<Student>();
-    
+
     private static final ProvidesKey<Student> KEY_PROVIDER = new ProvidesKey<Student>() {
         @Override
         public Object getKey(Student item) {
             return item.getEmail();
         }
     };
-    
+
     private String check;
 
     public TimeslotScreen() {
@@ -107,6 +104,9 @@ public class TimeslotScreen extends Composite {
 
         pager.setDisplay(timeslotCellTable);
         pager.setPageSize(8);
+        timeSlotList.addItem("Please Select a Time Slot");
+        errorLabel.setVisible(false);
+        errorLabel.setText("No Time Slot Selected! Please try again!");
     }
 
     private void initTimeslotCellTable(){
@@ -289,7 +289,7 @@ public class TimeslotScreen extends Composite {
 
             timeSlotList.clear();
             timeSlotList.insertItem("Please Select a Time Slot",0);
-            timeSlotList.insertItem("23 October 2013, 9am to 10am", 1);
+            timeSlotList.insertItem("23 October 2013, 9:00am to 10:00am", 1);
             timeSlotList.insertItem("23 October 2013, 10:15AM to 11:15AM",2);
             timeSlotList.insertItem("23 October 2013, 11:30AM to 12:30PM",3);
             timeSlotList.insertItem("23 October 2013, 12:45PM to 13:45pm",4);
@@ -312,78 +312,88 @@ public class TimeslotScreen extends Composite {
     }
     @UiHandler("timeSlotList")
     public void handleTimeslotChange(ChangeEvent event){
-        String timeslot1 = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
         String timeslot;
+        switch (timeSlotList.getSelectedIndex()) {
+            case 0:
+                errorLabel.setText("No Time Slot Selected! Please try again!");
+                break;
+            case 1:
+                if (countryField.getItemText(countryField.getSelectedIndex()).contains("China")){
+                    timeslot = "2013-10-23 09:00";
+                    countTimeslot(timeslot);
+                    errorLabel.setVisible(false);
+                }
+                else {
+                    timeslot ="2013-10-24 14:00";
+                    countTimeslot(timeslot);
+                    errorLabel.setVisible(false);
+                }
+                break;
 
-        if (timeslot1.equals("Please Select a Time Slot")){
-            timeslotLabel.setText("");
-
-        }
-        else if (timeslot1.equals("23 October 2013, 9am to 10am")){
-            timeslot = "2013-10-23 09:00";
-            countTimeslot(timeslot);
-        }
-        else if (timeslot1.equals("23 October 2013, 10:15AM to 11:15AM")){
-            timeslot = "2013-10-23 10:15";
-            countTimeslot(timeslot);
-        }
-
-        else if (timeslot1.equals("23 October 2013, 11:30AM to 12:30PM")) {
-            timeslot = "2013-10-23 11:30";
-            countTimeslot(timeslot);
-
-        }
-        else if (timeslot1.equals("23 October 2013, 12:45PM to 13:45pm")) {
-            timeslot = "2013-10-23 12:45";
-            countTimeslot(timeslot);
-        }
-
-        else if (timeslot1.equals("23 October 2013, 14:00PM to 15:00PM")) {
-            timeslot = "2013-10-23 14:00";
-            countTimeslot(timeslot);
-        }
-
-        else if (timeslot1.equals("23 October 2013, 15:15PM to 16:15PM")){
-            timeslot = "2013-10-23 15:15";
-            countTimeslot(timeslot);
-        }
-
-        else if (timeslot1.equals("23 October 2013, 16:30PM to 17:30PM")) {
-            timeslot = "2013-10-23 16:30";
-            countTimeslot(timeslot);
-        }
-        else if (timeslot1.equals("23 October 2013, 17:45PM to 18:45PM")) {
-            timeslot = "2013-10-23 17:45";
-            countTimeslot(timeslot);
-        }
-
-        else if (timeslot1.equals("23 October 2013, 19:00PM to 20:00PM")){
-            timeslot = "2013-10-23 19:00";
-            countTimeslot(timeslot);
-        }
-
-        else if (timeslot1.equals("23 October 2013, 20:15PM to 21.15PM")){
-            timeslot = "2013-10-23 20:15";
-            countTimeslot(timeslot);
-        }
-
-        else if (timeslot1.equals("24 October 2013, 14:00PM to 15.00PM")){
-            timeslot ="2013-10-24 14:00";
-            countTimeslot(timeslot);
-        }
-        else{
-            timeslot ="2013-10-24 16:00";
-            countTimeslot(timeslot);
+            case 2:
+                if (countryField.getItemText(countryField.getSelectedIndex()).contains("China")){
+                    timeslot = "2013-10-23 10:15";
+                    countTimeslot(timeslot);
+                    errorLabel.setVisible(false);
+                }
+                else {
+                    timeslot ="2013-10-24 16:00";
+                    countTimeslot(timeslot);
+                    errorLabel.setVisible(false);
+                }
+                break;
+            case 3:
+                timeslot = "2013-10-23 11:30";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 4:
+                timeslot = "2013-10-23 12:45";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 5:
+                timeslot = "2013-10-23 14:00";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 6:
+                timeslot = "2013-10-23 15:15";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 7:
+                timeslot = "2013-10-23 16:30";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 8:
+                timeslot = "2013-10-23 17:45";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 9:
+                timeslot = "2013-10-23 19:00";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
+            case 10:
+                timeslot = "2013-10-23 20:15";
+                countTimeslot(timeslot);
+                errorLabel.setVisible(false);
+                break;
         }
     }
 
     @UiHandler("countryField")
     public void handleCountryChange(ChangeEvent event) {
         String contains;
+        String country = null;
         list.clear();
         switch (countryField.getSelectedIndex()) {
             //Do nothing
             case 0:
+                noTimeslotLabel.setText("");
                 for (Student s : origStudentList){
                     list.add(s);
                 }
@@ -391,6 +401,7 @@ public class TimeslotScreen extends Composite {
 
             // Singapore
             case 1:
+                country = "Singapore";
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
                 for (Student s : origStudentList){
@@ -399,9 +410,11 @@ public class TimeslotScreen extends Composite {
                     }
                 }
                 regionField.setSelectedIndex(0);
+                countContestant(country,null);
                 break;
             // Malaysia
             case 2:
+                country = "Malaysia";
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
                 for (Student s : origStudentList){
@@ -410,9 +423,11 @@ public class TimeslotScreen extends Composite {
                     }
                 }
                 regionField.setSelectedIndex(0);
+                countContestant(country,null);
                 break;
             // Thailand
             case 3:
+                country = "Thailand";
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
                 for (Student s : origStudentList){
@@ -421,6 +436,7 @@ public class TimeslotScreen extends Composite {
                     }
                 }
                 regionField.setSelectedIndex(0);
+                countContestant(country,null);
                 break;
             // China
             case 4:
@@ -432,9 +448,11 @@ public class TimeslotScreen extends Composite {
                     }
                 }
                 regionField.setSelectedIndex(0);
+                countContestant(country,null);
                 break;
             // Hong Kong
             case 5:
+                country = "Hong Kong";
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
                 for (Student s : origStudentList){
@@ -443,9 +461,11 @@ public class TimeslotScreen extends Composite {
                     }
                 }
                 regionField.setSelectedIndex(0);
+                countContestant(country,null);
                 break;
             // Taiwan
             case 6:
+                country = "Taiwan";
                 regionField.setVisible(false);
                  contains = countryField.getItemText(countryField.getSelectedIndex());
                 for (Student s : origStudentList){
@@ -454,6 +474,7 @@ public class TimeslotScreen extends Composite {
                     }
                 }
                 regionField.setSelectedIndex(0);
+                countContestant(country,null);
                 break;
         }
         provider.getList().clear();
@@ -462,33 +483,37 @@ public class TimeslotScreen extends Composite {
 
     @UiHandler("timeSlotButton")
     public void handleTimeSlotButtonClick(ClickEvent event) {
-        final String timeSlot = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
-        if(!check.equals("0")){
-            userService.assignTimeSlot(selectedStudentList, timeSlot, new AsyncCallback<Boolean>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                    caught.printStackTrace();
-                }
-
-                @Override
-                public void onSuccess(Boolean result) {
-                    if(!result) {
-                        displayErrorBox("Error", "Unable to Assign Time Slot");
+        final String timeSlot;
+        if(!timeSlotList.getItemText(timeSlotList.getSelectedIndex()).equals("Please Select a Time Slot")){
+            timeSlot = timeSlotList.getItemText(timeSlotList.getSelectedIndex());
+            if(!check.equals("0")){
+                userService.assignTimeSlot(selectedStudentList, timeSlot, new AsyncCallback<Boolean>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        caught.printStackTrace();
                     }
 
-                    else {
-                        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
+                    @Override
+                    public void onSuccess(Boolean result) {
+                        if(!result) {
+                            displayErrorBox("Error", "Unable to Assign Time Slot");
+                        }
+
+                        else {
+                            ContentContainer.INSTANCE.setContent(new TimeslotScreen());
+                        }
                     }
-                }
-            });
+                });
 
-            timeslotCellTable.redraw();
+                timeslotCellTable.redraw();
 
+            }
+            else{
+                timeslotLabel.setText("The time slot is full, please try another time slot");
+            }
         }
-
         else{
-            timeslotLabel.setText("The time slot is full, please try another time slot");
-
+            errorLabel.setVisible(true);
         }
     }
 
@@ -504,6 +529,7 @@ public class TimeslotScreen extends Composite {
         String region = null;
         switch (regionField.getSelectedIndex()) {
             case 0:
+                noTimeslotLabel.setText("");
                 list.clear();
                 for (Student s : origStudentList){
                     if (s.getCountry().contains("China")){
@@ -521,7 +547,7 @@ public class TimeslotScreen extends Composite {
                         list.add(s);
                     }
                 }
-                countContestant(region);
+                countContestant(null, region);
                 break;
             //Shanghai
             case 2:
@@ -533,7 +559,7 @@ public class TimeslotScreen extends Composite {
                         list.add(s);
                     }
                 }
-                countContestant(region);
+                countContestant(null, region);
                 break;
             // Wuhan
             case 3:
@@ -545,7 +571,7 @@ public class TimeslotScreen extends Composite {
                         list.add(s);
                     }
                 }
-                countContestant(region);
+                countContestant(null, region);
                 break;
             // Dalian
             case 4:
@@ -557,7 +583,7 @@ public class TimeslotScreen extends Composite {
                         list.add(s);
                     }
                 }
-                countContestant(region);
+                countContestant(null, region);
                 break;
             // Jinan
             case 5:
@@ -569,7 +595,7 @@ public class TimeslotScreen extends Composite {
                         list.add(s);
                     }
                 }
-                countContestant(region);
+                countContestant(null, region);
                 break;
             // Others
             case 6:
@@ -581,7 +607,7 @@ public class TimeslotScreen extends Composite {
                         list.add(s);
                     }
                 }
-                countContestant(region);
+                countContestant(null, region);
                 break;
         }
         provider.getList().clear();
@@ -589,9 +615,9 @@ public class TimeslotScreen extends Composite {
     }
 
 
-    private void countContestant(String region){
+    private void countContestant(String country, String region){
         final String region1 = region;
-
+        final String country1 = country;
         userService = UserService.Util.getInstance();
 
         userService.getListOfStudents(new AsyncCallback<List<Student>>(){
@@ -599,24 +625,37 @@ public class TimeslotScreen extends Composite {
             @Override
             public void onFailure(Throwable caught) {
                 caught.printStackTrace();
-                noTimeslot.setText("Error123");
+                noTimeslotLabel.setText("An unexpected error has occurred, please try again later!");
             }
 
             @Override
             public void onSuccess(List<Student> studentList) {
 
-                int counter = 0;
-//            String region = regionField.getItemText(regionField.getSelectedIndex());
-                for(Student s : studentList) {
-                    if(s.getCountry().substring(6).equals(region1)){
-                        if(s.getTimeslot() == 0){
-                            counter++;
+                if(!countryField.getItemText(countryField.getSelectedIndex()).equals("China")){
+
+                    int counter = 0;
+                    for(Student s : studentList) {
+                        if(s.getCountry().equals(country1)){
+                            if(s.getTimeslot() == 0){
+                                counter++;
+                            }
                         }
                     }
+                    noTimeslotLabel.setText("Number of contestant from " + country1 + " without timeslot: " + counter);
+
                 }
-                noTimeslot.setText("Number of contestant from "+ region1 + " without timeslot: " + counter);
+                else{
+                    int counter = 0;
+                    for(Student s : studentList) {
+                        if(s.getCountry().substring(6).equals(region1)){
+                            if(s.getTimeslot() == 0){
+                                counter++;
+                            }
+                        }
+                    }
+                        noTimeslotLabel.setText("Number of contestant from " + region1 + " without timeslot: " + counter);
 
-
+                }
             }
         });
 
@@ -659,7 +698,7 @@ public class TimeslotScreen extends Composite {
         }
         provider.setList(list);
     }
-    
+
     private void countTimeslot(String timeslot){
 
         final String timeslot1 = timeslot;
@@ -682,7 +721,7 @@ public class TimeslotScreen extends Composite {
                     if(s.getTimeslot() != 0){
 
                         Date date = new Date(s.getTimeslot());
-                        String formatedDate = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(date);
+                        final String formatedDate = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT).format(date);
 
                         if(formatedDate.equals(timeslot1)){
                             counter++;
@@ -696,5 +735,10 @@ public class TimeslotScreen extends Composite {
 
             }
         });
+    }
+
+    @UiHandler("timeslotPageRefresh")
+    public void refreshButton(ClickEvent event){
+        ContentContainer.INSTANCE.setContent(new TimeslotScreen());
     }
 }

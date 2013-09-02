@@ -952,7 +952,7 @@ public class UserScreen extends Composite {
             cellTable.redraw();
         }
         else{
-            errorLabel.setText("No Time Slot Selected");
+            errorLabel.setText("No Time Slot Selected! Please try again!");
         }
 
 
